@@ -1,0 +1,10 @@
+node_modules
+.next
+.env
+.env*.local
+.DS_Store
+*.log
+.claude
+tsconfig.tsbuildinfo
+# duplicate of public/assets — not served by Next.js
+/assets
