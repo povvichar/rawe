@@ -7,7 +7,7 @@
 :root {
   --font-display: 'The Seasons', serif;
   --hero-bg: #ededed;
-  --products-bg: #ffffff;
+  --products-bg: #ededed;
   --accent: #e8a0b4;
   --text-dark: #1a1a1a;
   --text-mid: #6b6b6b;
@@ -19,6 +19,7 @@ body {
   color: var(--text-dark);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -32,48 +33,53 @@ body {
   }
 }
 
-.liquid-glass-btn,
-.liquid-glass-btn::before,
-.liquid-glass-btn::after {
-  content: none;
-  list-style: none;
-}
-
 .liquid-glass-btn {
   display: inline-block;
   position: relative;
-  padding: 0.95rem 2.25rem;
+  padding: 0.85rem 2.2rem;
   border-radius: 9999px;
   font-family: var(--font-display), serif;
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 400;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: #1a1a1a;
-  background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.40);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(1.05);
   transition:
-    background 0.3s ease,
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  will-change: transform;
+    background 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.4s ease;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
+
 .liquid-glass-btn:hover {
-  background: rgba(255, 255, 255, 0.55);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.48);
+  transform: translateY(-2px);
   box-shadow:
-    0 14px 36px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    0 12px 40px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
 }
+
 .liquid-glass-btn:active {
-  transform: translateY(0);
+  transform: translateY(0px) scale(0.98);
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transition-duration: 0.1s;
+}
+
+.liquid-glass-btn:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.25);
+  outline-offset: 3px;
 }
 
 .brand-watermark {

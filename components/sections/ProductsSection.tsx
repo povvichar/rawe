@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
@@ -9,58 +9,65 @@ import { useCart } from "@/lib/cart";
 function ShadeCard({ shade }: { shade: Shade }) {
   const { add } = useCart();
   return (
-    <article className="shade-card group rounded-2xl bg-[#FAFAFA] p-5 flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-white">
-        <div
-          className="absolute inset-0 mix-blend-multiply z-10"
-          style={{ backgroundColor: shade.hex, opacity: 0.5 }}
-          aria-hidden
-        />
-        <Image
-          src="/assets/main-pro1.png"
-          alt={shade.name}
-          fill
-          sizes="(max-width: 768px) 50vw, 25vw"
-          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
-        />
+    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+      {/* Full-bleed image */}
+      <Image
+        src={shade.image}
+        alt={shade.name}
+        fill
+        sizes="(max-width: 768px) 90vw, 33vw"
+        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+      />
+
+      {/* Title + price — hidden on hover */}
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-5 pb-5 transition-opacity duration-300 group-hover:opacity-0">
+        <p className="text-sm font-medium text-ink">{shade.name}</p>
+        <p className="text-sm text-ink">${shade.priceUSD}.00</p>
       </div>
-      <div className="mt-4 flex items-center gap-2">
-        <span
-          className="w-3 h-3 rounded-full ring-1 ring-black/5"
-          style={{ backgroundColor: shade.hex }}
-          aria-hidden
-        />
-        <p className="text-sm font-medium text-ink">
-          {shade.id} · {shade.name}
-        </p>
+
+      {/* Add to Cart — shown on hover */}
+      <div className="absolute inset-x-0 bottom-0 flex justify-center pb-5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+        <button
+          onClick={() =>
+            add({
+              shadeId: shade.id,
+              name: shade.name,
+              hex: shade.hex,
+              priceUSD: shade.priceUSD,
+            })
+          }
+          className="bg-ink text-white text-xs tracking-[0.15em] uppercase px-6 py-3 rounded-full hover:bg-ink/80 transition-colors duration-200"
+        >
+          Add to Cart · ${shade.priceUSD}.00
+        </button>
       </div>
-      <p className="text-xs text-mid mt-1">{shade.label}</p>
-      <button
-        onClick={() =>
-          add({
-            shadeId: shade.id,
-            name: shade.name,
-            hex: shade.hex,
-            priceUSD: shade.priceUSD,
-          })
-        }
-        className="mt-3 rounded-full text-xs tracking-[0.18em] uppercase px-4 py-2 text-ink hover:opacity-90 transition"
-        style={{ backgroundColor: shade.hex }}
-      >
-        Add to Cart · ${shade.priceUSD}
-      </button>
     </article>
   );
 }
 
 export default function ProductsSection() {
   const ref = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const [animating, setAnimating] = useState(false);
+  const perPage = 4;
+  const totalPages = Math.ceil(shades.length / perPage);
+
+  const goTo = (direction: 1 | -1) => {
+    const next = Math.max(0, Math.min(totalPages - 1, page + direction));
+    if (next === page || animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setPage(next);
+      setTimeout(() => setAnimating(false), 350);
+    }, 350);
+  };
 
   useGSAP(
     () => {
       gsap.fromTo(
         ".products-title-block",
-        { opacity: 0, y: 60 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
@@ -68,7 +75,7 @@ export default function ProductsSection() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: ref.current,
-            start: "top 90%",
+            start: "top 110%",
             once: true,
           },
         }
@@ -79,12 +86,12 @@ export default function ProductsSection() {
         {
           opacity: 1,
           y: 0,
-          stagger: 0.08,
+          stagger: 0.1,
           duration: 0.6,
           ease: "power2.out",
           scrollTrigger: {
             trigger: ref.current,
-            start: "top 75%",
+            start: "top 100%",
             once: true,
           },
         }
@@ -93,28 +100,94 @@ export default function ProductsSection() {
     { scope: ref }
   );
 
+  const visible = shades.slice(page * perPage, page * perPage + perPage);
+
   return (
     <section
       ref={ref}
       id="products"
-      className="relative bg-products py-24 md:py-32"
+      className="relative bg-products pt-2 pb-24 md:pt-2 md:pb-16"
     >
-      <div className="products-title-block text-center px-12 mb-14">
-        <p className="text-[11px] tracking-[0.3em] uppercase text-mid mb-3">
-          New Collection
+      {/* Title */}
+      <div className="products-title-block text-center px-5 sm:px-8 md:px-12 mb-12 sm:mb-18">
+        <p className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-mid mb-2 sm:mb-3">
+          The Collection
         </p>
-        <h2 className="font-display text-5xl md:text-6xl font-light text-ink">
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
           Our Products
         </h2>
-        <p className="mt-3 text-sm text-mid">
-          8 Shades, One for Every You
-        </p>
       </div>
 
-      <div className="mx-auto max-w-7xl px-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {shades.map((s) => (
-          <ShadeCard key={s.id} shade={s} />
-        ))}
+      {/* Cards + nav */}
+      <div className="px-5 sm:px-8 md:px-12">
+        <div
+          ref={trackRef}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-5"
+          style={{
+            transition: "transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.35s ease, filter 0.35s ease",
+            opacity: animating ? 0 : 1,
+            filter: animating ? "blur(8px)" : "blur(0px)",
+            transform: animating ? "scale(0.94)" : "scale(1)",
+          }}
+        >
+          {visible.map((s, i) => (
+            <div key={s.id} className="shade-card relative">
+              <ShadeCard shade={s} />
+              {/* Next arrow floats centered on the last card */}
+              {i === visible.length - 1 && page < totalPages - 1 && (
+                <button
+                  onClick={() => goTo(1)}
+                  aria-label="Next products"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:-translate-y-1/2 hover:scale-110"
+                  style={{
+                    background: "rgba(255,255,255,0.35)",
+                    border: "1px solid rgba(255,255,255,0.6)",
+                    backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+                    WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.75)",
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 3l5 5-5 5" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              )}
+              {/* Prev arrow floats centered on the first card */}
+              {i === 0 && page > 0 && (
+                <button
+                  onClick={() => goTo(-1)}
+                  aria-label="Previous products"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110"
+                  style={{
+                    background: "rgba(255,255,255,0.35)",
+                    border: "1px solid rgba(255,255,255,0.6)",
+                    backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+                    WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.75)",
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10 3L5 8l5 5" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Dot indicators */}
+        <div className="flex justify-center gap-2 mt-6">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setPage(i)}
+              aria-label={`Page ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${
+                i === page ? "w-5 h-1.5 bg-ink" : "w-1.5 h-1.5 bg-ink/25"
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

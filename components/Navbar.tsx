@@ -31,14 +31,14 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out
-        ${scrolled ? "backdrop-blur-md bg-white/70 border-b border-black/5" : "bg-transparent"}
+        ${scrolled ? "backdrop-blur-md bg-white/​60 border-b border-black/5" : "bg-transparent"}
         ${hidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}
       `}
     >
-      <nav className="mx-auto max-w-7xl flex items-center justify-between px-12 py-4">
+      <nav className="mx-auto max-w-7xl flex items-center justify-between px-14 py-4">
         <Link
           href="/"
-          className="font-display text-2xl font-light tracking-[0.3em] text-ink"
+          className="font-display text-2xl font-medium tracking-[0.3em] text-ink"
         >
           {site.name}
         </Link>
@@ -48,9 +48,10 @@ export default function Navbar() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="hover:text-ink transition-colors duration-200"
+                className="relative group inline-block text-mid hover:text-ink transition-colors duration-300"
               >
                 {l.label}
+                <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
               </Link>
             </li>
           ))}
@@ -60,14 +61,14 @@ export default function Navbar() {
           <Link
             href="/account"
             aria-label="Account"
-            className="p-2 hover:opacity-70 transition"
+            className="p-2 transition-all duration-300 hover:opacity-60 hover:scale-110"
           >
             <Image src="/assets/user.svg" width={20} height={20} alt="" />
           </Link>
           <Link
             href="/cart"
             aria-label="Cart"
-            className="relative p-2 hover:opacity-70 transition"
+            className="relative p-2 transition-all duration-300 hover:opacity-60 hover:scale-110"
           >
             <Image src="/assets/cart.svg" width={20} height={20} alt="" />
             {count > 0 && (

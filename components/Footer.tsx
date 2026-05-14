@@ -4,9 +4,9 @@ import { nav, site } from "@/data/site";
 export default function Footer() {
   return (
     <footer className="bg-ink text-white/60">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid md:grid-cols-3 gap-10">
-          <div>
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 md:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
+          <div className="col-span-2 md:col-span-1">
             <p className="font-display text-2xl text-white font-light tracking-[0.3em]">
               {site.name}
             </p>

@@ -4,15 +4,16 @@ export type Shade = {
   hex: string;
   label: string;
   priceUSD: number;
+  image: string;
 };
 
 export const shades: Shade[] = [
-  { id: "01", name: "Bare Petal", hex: "#F2C5C0", label: "Sheer", priceUSD: 18 },
-  { id: "02", name: "Rose Mist", hex: "#E8A4A0", label: "Natural", priceUSD: 18 },
-  { id: "03", name: "Peachy Flush", hex: "#E8B89A", label: "Warm", priceUSD: 18 },
-  { id: "04", name: "Coral Veil", hex: "#D98C80", label: "Vibrant", priceUSD: 18 },
-  { id: "05", name: "Mauve Cloud", hex: "#C4909A", label: "Romantic", priceUSD: 18 },
-  { id: "06", name: "Berry Glow", hex: "#B07088", label: "Bold", priceUSD: 18 },
-  { id: "07", name: "Golden Blush", hex: "#D4A080", label: "Radiant", priceUSD: 18 },
-  { id: "08", name: "Deep Rose", hex: "#A05870", label: "Dramatic", priceUSD: 18 },
+  { id: "01", name: "Cappucino",      hex: "#C49A8A", label: "Romantic",  priceUSD: 25, image: "/assets/products/Cappucino.webp" },
+  { id: "02", name: "Champagne Glow", hex: "#D4B896", label: "Radiant",   priceUSD: 25, image: "/assets/products/Champagne glow.webp" },
+  { id: "03", name: "Cotton Candy",   hex: "#F2C5C0", label: "Sheer",     priceUSD: 25, image: "/assets/products/Cotton candy.webp" },
+  { id: "04", name: "Plushing",       hex: "#E8A4A0", label: "Natural",   priceUSD: 25, image: "/assets/products/Plushing.webp" },
+  { id: "05", name: "Rosewood",       hex: "#A05870", label: "Dramatic",  priceUSD: 25, image: "/assets/products/Rosewood.webp" },
+  { id: "06", name: "Rosy Posy",      hex: "#E8B89A", label: "Warm",      priceUSD: 25, image: "/assets/products/Rosy Posy.webp" },
+  { id: "07", name: "Spiced",         hex: "#D98C80", label: "Vibrant",   priceUSD: 25, image: "/assets/products/Spiced.webp" },
+  { id: "08", name: "Summer Orange",  hex: "#E8A870", label: "Bold",      priceUSD: 25, image: "/assets/products/Summer orange.webp" },
 ];

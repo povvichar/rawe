@@ -34,7 +34,7 @@ export default function HeroSection() {
           pin: true,
           anticipatePin: 1,
           start: "top top",
-          end: "+=300%",
+          end: "+=160%",
           scrub: 1.2,
           invalidateOnRefresh: true,
         },
@@ -94,11 +94,11 @@ export default function HeroSection() {
           { scale: 1.7, y: -220, ease: "power1.inOut" },
           0.2
         )
-        // 0.55 → 0.75 — product exits top (frame 06 → 07)
+        // 0.50 → 0.70 — product exits top (frame 06 → 07)
         .to(
           "#product-img",
-          { y: -520, opacity: 0, ease: "power2.in" },
-          0.55
+          { y: -420, opacity: 0, ease: "power2.in" },
+          0.50
         )
         // smoke handled by products-entry ScrollTrigger below (rises & fades as products enters)
         ;
@@ -116,16 +116,16 @@ export default function HeroSection() {
       id="hero"
       className="relative w-full h-screen bg-hero z-[2]"
     >
-      {/* smoke — top layer, anchored to bottom of hero, fades upward */}
+      {/* smoke — behind product, fills lower half */}
       <div
         id="smoke"
-        className="absolute inset-x-0 z-[8] pointer-events-none"
+        className="absolute inset-x-0 z-[10] pointer-events-none"
         style={{
-          bottom: "-25%",
-          height: "75%",
-          opacity: 0.9,
-          maskImage: "linear-gradient(to bottom, transparent 0%, black 55%)",
-          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 55%)",
+          bottom: "-30%",
+          height: "65%",
+          opacity: 1,
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
         }}
       >
         <Image
@@ -134,19 +134,19 @@ export default function HeroSection() {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-bottom"
+          className="object-cover object-center"
         />
       </div>
 
       {/* hero copy — top center (frame 01) */}
       <div
         id="hero-copy"
-        className="absolute z-[5] inset-x-0 top-[22vh] text-center px-12 will-change-transform"
+        className="absolute z-[5] inset-x-0 top-[18vh] sm:top-[22vh] text-center px-5 sm:px-8 md:px-12 will-change-transform"
       >
-        <h1 className="font-display font-bold leading-[1.05] text-ink text-[clamp(32px,3.8vw,58px)] mb-4">
+        <h1 className="font-display font-bold leading-[1.05] text-ink text-[clamp(22px,3.8vw,58px)] mb-4 whitespace-nowrap">
           Natural Glow, Made for Your Skin
         </h1>
-        <p className="text-mid mx-auto leading-relaxed mb-10 text-[15px] whitespace-nowrap">
+        <p className="text-mid mx-auto leading-relaxed mb-8 sm:mb-10 text-[clamp(12px,1.3vw,17px)] whitespace-nowrap">
           A creamy blush that blends effortlessly and flatters every Cambodian skin tone.
         </p>
         <a href="#products" className="liquid-glass-btn">
@@ -157,8 +157,8 @@ export default function HeroSection() {
       {/* cloud left — flanking product */}
       <div
         id="cloud-left"
-        className="absolute z-[4] pointer-events-none will-change-transform"
-        style={{ top: "46%", left: "2%", width: "44vw", maxWidth: "580px" }}
+        className="absolute z-[6] pointer-events-none will-change-transform"
+        style={{ top: "46%", left: "2%", width: "58vw", maxWidth: "760px" }}
       >
         <Image
           src="/assets/cloud-left.webp"
@@ -173,8 +173,8 @@ export default function HeroSection() {
       {/* cloud right — flanking product */}
       <div
         id="cloud-right"
-        className="absolute z-[4] pointer-events-none will-change-transform"
-        style={{ top: "40%", right: "2%", width: "44vw", maxWidth: "580px" }}
+        className="absolute z-[6] pointer-events-none will-change-transform"
+        style={{ top: "40%", right: "2%", width: "58vw", maxWidth: "760px" }}
       >
         <Image
           src="/assets/cloud-right.webp"
@@ -186,18 +186,18 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* product — center, tilted, ON TOP of copy */}
+      {/* product — center, tilted, ON TOP of smoke */}
       <div
         className="absolute z-[7] left-1/2 will-change-transform pointer-events-none"
         style={{
-          top: "75%",
+          top: "82%",
           transform: "translate(-50%, -50%)",
-          width: "min(68vw, 760px)",
+          width: "min(95vw, 980px)",
         }}
       >
         <div id="product-img" className="relative will-change-transform w-full">
           <Image
-            src="/assets/main-pro1.png"
+            src="/assets/main-pro1.webp"
             alt="RAWE creamy blush stick"
             width={2251}
             height={1158}

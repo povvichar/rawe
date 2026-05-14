@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         hero: "#EDEDED",
-        products: "#FFFFFF",
+        products: "#EDEDED",
         accent: "#E8A0B4",
         ink: "#1A1A1A",
         mid: "#6B6B6B",
