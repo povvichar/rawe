@@ -28,6 +28,18 @@ export default function HeroSection() {
         return;
       }
 
+      // Page load — fade + slide down from top
+      gsap.set(["#hero-copy", "#cloud-left", "#cloud-right", "#product-float", "#smoke"], {
+        opacity: 0,
+        y: -30,
+      });
+      gsap.timeline({ delay: 0.1 })
+        .to("#hero-copy",     { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" })
+        .to("#cloud-left",    { opacity: 0.95, y: 0, duration: 1, ease: "power3.out" }, "-=0.5")
+        .to("#cloud-right",   { opacity: 0.95, y: 0, duration: 1, ease: "power3.out" }, "-=0.9")
+        .to("#product-float", { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, "-=0.7")
+        .to("#smoke",         { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }, "-=0.9");
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
@@ -103,6 +115,14 @@ export default function HeroSection() {
         // smoke handled by products-entry ScrollTrigger below (rises & fades as products enters)
         ;
 
+      gsap.to("#product-float", {
+        y: -14,
+        duration: 2.8,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+      });
+
       const onResize = () => ScrollTrigger.refresh();
       window.addEventListener("resize", onResize);
       return () => window.removeEventListener("resize", onResize);
@@ -158,7 +178,7 @@ export default function HeroSection() {
       <div
         id="cloud-left"
         className="absolute z-[6] pointer-events-none will-change-transform"
-        style={{ top: "46%", left: "2%", width: "58vw", maxWidth: "760px" }}
+        style={{ top: "46%", left: "2%", width: "81vw", maxWidth: "1064px" }}
       >
         <Image
           src="/assets/cloud-left.webp"
@@ -174,7 +194,7 @@ export default function HeroSection() {
       <div
         id="cloud-right"
         className="absolute z-[6] pointer-events-none will-change-transform"
-        style={{ top: "40%", right: "2%", width: "58vw", maxWidth: "760px" }}
+        style={{ top: "40%", right: "2%", width: "81vw", maxWidth: "1064px" }}
       >
         <Image
           src="/assets/cloud-right.webp"
@@ -188,11 +208,12 @@ export default function HeroSection() {
 
       {/* product — center, tilted, ON TOP of smoke */}
       <div
+        id="product-float"
         className="absolute z-[7] left-1/2 will-change-transform pointer-events-none"
         style={{
           top: "82%",
           transform: "translate(-50%, -50%)",
-          width: "min(95vw, 980px)",
+          width: "min(92vw, 960px)",
         }}
       >
         <div id="product-img" className="relative will-change-transform w-full">

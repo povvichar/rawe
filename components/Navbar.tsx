@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { nav, site } from "@/data/site";
+import { nav } from "@/data/site";
 import { useCart } from "@/lib/cart";
 
 export default function Navbar() {
@@ -36,19 +36,16 @@ export default function Navbar() {
       `}
     >
       <nav className="mx-auto max-w-7xl flex items-center justify-between px-14 py-4">
-        <Link
-          href="/"
-          className="font-display text-2xl font-medium tracking-[0.3em] text-ink"
-        >
-          {site.name}
+        <Link href="/" aria-label="RAWE home">
+          <Image src="/assets/logo-circle.svg" alt="RAWE" width={48} height={48} priority />
         </Link>
 
-        <ul className="hidden md:flex items-center gap-10 text-sm text-mid">
+        <ul className="hidden md:flex items-center gap-12 text-lg text-mid">
           {nav.links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="relative group inline-block text-mid hover:text-ink transition-colors duration-300"
+                className="relative group inline-block font-display text-mid hover:text-ink transition-colors duration-300"
               >
                 {l.label}
                 <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />

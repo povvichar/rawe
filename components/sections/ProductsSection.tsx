@@ -9,24 +9,24 @@ import { useCart } from "@/lib/cart";
 function ShadeCard({ shade }: { shade: Shade }) {
   const { add } = useCart();
   return (
-    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer">
+    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-white">
       {/* Full-bleed image */}
       <Image
         src={shade.image}
         alt={shade.name}
         fill
-        sizes="(max-width: 768px) 90vw, 33vw"
+        sizes="(max-width: 768px) 50vw, 25vw"
         className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       />
 
-      {/* Title + price — hidden on hover */}
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between px-5 pb-5 transition-opacity duration-300 group-hover:opacity-0">
-        <p className="text-sm font-medium text-ink">{shade.name}</p>
-        <p className="text-sm text-ink">${shade.priceUSD}.00</p>
+      {/* Title + price overlay — visible by default, hidden on hover */}
+      <div className="absolute inset-x-0 bottom-[10px] px-4 pb-4 flex flex-col gap-1 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
+        <p className="font-display text-base uppercase font-medium text-ink tracking-[0.15em]">{shade.name}</p>
+        <p className="text-lg font-base text-ink/70">${shade.priceUSD}.00</p>
       </div>
 
-      {/* Add to Cart — shown on hover */}
-      <div className="absolute inset-x-0 bottom-0 flex justify-center pb-5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+      {/* Add to Cart button — hidden by default, shown on hover */}
+      <div className="absolute inset-x-0 bottom-[10px] flex justify-center pb-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
         <button
           onClick={() =>
             add({
@@ -36,9 +36,9 @@ function ShadeCard({ shade }: { shade: Shade }) {
               priceUSD: shade.priceUSD,
             })
           }
-          className="bg-ink text-white text-xs tracking-[0.15em] uppercase px-6 py-3 rounded-full hover:bg-ink/80 transition-colors duration-200"
+          className="rounded-full border border-ink bg-white/80 backdrop-blur-sm text-ink text-xs tracking-[0.15em] uppercase px-6 py-2.5 hover:bg-ink hover:text-white transition-colors duration-200"
         >
-          Add to Cart · ${shade.priceUSD}.00
+          Add to Cart · ${shade.priceUSD}
         </button>
       </div>
     </article>
