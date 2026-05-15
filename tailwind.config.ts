@@ -9,8 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        hero: "#EDEDED",
-        products: "#EDEDED",
+        hero: "#F2F2F2",
+        products: "#F2F2F2",
         accent: "#E8A0B4",
         ink: "#1A1A1A",
         mid: "#6B6B6B",
