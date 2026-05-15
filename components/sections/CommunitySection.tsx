@@ -26,17 +26,26 @@ export default function CommunitySection() {
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        ".community-title",
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
-        }
-      );
+      gsap.set(".section-word", { opacity: 0, y: 20 });
+      gsap.to(".section-word", {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.08,
+        delay: 0.3,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
+      });
+
+      gsap.set(".social-pill-btn", { opacity: 0, y: 18 });
+      gsap.to(".social-pill-btn", {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.07,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ref.current, start: "top 75%", once: true },
+      });
 
       const track = trackRef.current;
       if (!track) return;
@@ -58,29 +67,26 @@ export default function CommunitySection() {
   return (
     <section ref={ref} id="community" className="bg-hero py-16 sm:py-20 md:py-28 overflow-hidden">
       {/* Title */}
-      <div className="community-title text-center px-5 mb-10 sm:mb-12">
+      <div className="text-center px-5 mb-10 sm:mb-12">
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
-          Loved by Our Community
+          {["Loved", "by", "Our", "Community"].map((word, i, arr) => (
+            <span key={i} className="section-word inline-block">
+              {word}{i < arr.length - 1 ? " " : ""}
+            </span>
+          ))}
         </h2>
        {/* <p className="mt-2 text-xs sm:text-sm text-mid">Follow us {site.social.handle}</p>*/}
       </div>
 
       {/* Social pills — liquid glass */}
-      <div className="community-title flex justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 px-5">
+      <div className="flex justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 px-5">
         {socials.map((s) => (
           <a
             key={s.label}
             href={s.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 sm:px-4 py-2 sm:py-1.5 rounded-full text-xs sm:text-sm text-ink transition-all duration-300 hover:scale-105"
-            style={{
-              background: "rgba(255,255,255,0.20)",
-              border: "0px solid rgba(255,255,255,0.4)",
-              backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
-              WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
-              boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.75)",
-            }}
+            className="social-pill-btn flex items-center gap-2 px-4 sm:px-4 py-2 sm:py-1.5 rounded-full text-xs sm:text-sm text-ink"
           >
             <Image src={s.icon} alt={s.label} width={16} height={16} />
             <span>{s.handle}</span>

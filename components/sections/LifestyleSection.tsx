@@ -15,6 +15,17 @@ export default function LifestyleSection() {
 
   useGSAP(
     () => {
+      gsap.set(".section-word", { opacity: 0, y: 20 });
+      gsap.to(".section-word", {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.08,
+        delay: 0.3,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
+      });
+
       gsap.to("#lifestyle-product", {
         y: -12,
         duration: 2.5,
@@ -38,9 +49,15 @@ export default function LifestyleSection() {
       <div className="mx-auto max-w-7xl px-5 sm:px-8 md:px-12 grid md:grid-cols-5 gap-10 md:gap-12 items-center">
         <div className="md:col-span-3 text-center md:text-left">
           <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-light text-ink leading-[1.05]">
-            Beauty That Fits
+            {["Beauty", "That", "Fits"].map((word, i) => (
+              <span key={i} className="section-word inline-block">{word}{" "}</span>
+            ))}
             <br />
-            Your Everyday Life
+            {["Your", "Everyday", "Life"].map((word, i, arr) => (
+              <span key={i} className="section-word inline-block">
+                {word}{i < arr.length - 1 ? " " : ""}
+              </span>
+            ))}
           </h2>
           <p className="mt-5 md:mt-6 text-sm md:text-base text-mid leading-relaxed max-w-xl mx-auto md:mx-0">
             Whether you&rsquo;re going to work, meeting friends, or attending a

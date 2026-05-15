@@ -4,10 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { nav } from "@/data/site";
 import { useCart } from "@/lib/cart";
+import CartDropdown from "@/components/ui/CartDropdown";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const lastY = useRef(0);
   const { count } = useCart();
 
@@ -62,18 +64,21 @@ export default function Navbar() {
           >
             <Image src="/assets/user.svg" width={20} height={20} alt="" />
           </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="relative p-2 transition-all duration-300 hover:opacity-60 hover:scale-110"
-          >
-            <Image src="/assets/cart.svg" width={20} height={20} alt="" />
-            {count > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-accent text-ink text-[10px] font-medium rounded-full w-4 h-4 flex items-center justify-center">
-                {count}
-              </span>
-            )}
-          </Link>
+          <div className="relative">
+            <button
+              onClick={() => setCartOpen((v) => !v)}
+              aria-label="Cart"
+              className="relative p-2 transition-all duration-300 hover:opacity-60 hover:scale-110"
+            >
+              <Image src="/assets/cart.svg" width={20} height={20} alt="" />
+              {count > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-accent text-ink text-[10px] font-medium rounded-full w-4 h-4 flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </button>
+            {cartOpen && <CartDropdown onClose={() => setCartOpen(false)} />}
+          </div>
         </div>
       </nav>
     </header>

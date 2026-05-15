@@ -28,17 +28,18 @@ export default function HeroSection() {
         return;
       }
 
-      // Page load — fade + slide down from top
-      gsap.set(["#hero-copy", "#cloud-left", "#cloud-right", "#product-float", "#smoke"], {
-        opacity: 0,
-        y: -30,
-      });
-      gsap.timeline({ delay: 0.1 })
-        .to("#hero-copy",     { opacity: 1, y: 0, duration: 0.9, ease: "power3.out" })
-        .to("#cloud-left",    { opacity: 0.95, y: 0, duration: 1, ease: "power3.out" }, "-=0.5")
-        .to("#cloud-right",   { opacity: 0.95, y: 0, duration: 1, ease: "power3.out" }, "-=0.9")
-        .to("#product-float", { opacity: 1, y: 0, duration: 1.1, ease: "power3.out" }, "-=0.7")
-        .to("#smoke",         { opacity: 1, y: 0, duration: 1.2, ease: "power3.out" }, "-=0.9");
+      // Page load — karaoke word-by-word entrance
+      gsap.set([".hero-word", ".hero-sub", ".hero-btn"], { opacity: 0, y: 18 });
+      gsap.set(["#cloud-left", "#cloud-right", "#product-float", "#smoke"], { opacity: 0, y: -30 });
+
+      gsap.timeline({ delay: 0.15 })
+        .to(".hero-word",     { opacity: 1, y: 0, duration: 0.45, stagger: 0.07, ease: "power2.out" })
+        .to(".hero-sub",      { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" }, "-=0.15")
+        .to(".hero-btn",      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "-=0.25")
+        .to("#cloud-left",    { opacity: 0.95, y: 0, duration: 1,   ease: "power3.out" }, 0.2)
+        .to("#cloud-right",   { opacity: 0.95, y: 0, duration: 1,   ease: "power3.out" }, 0.1)
+        .to("#product-float", { opacity: 1,    y: 0, duration: 1.1, ease: "power3.out" }, 0.3)
+        .to("#smoke",         { opacity: 1,    y: 0, duration: 1.2, ease: "power3.out" }, 0.2);
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -164,12 +165,19 @@ export default function HeroSection() {
         className="absolute z-[5] inset-x-0 top-[18vh] sm:top-[22vh] text-center px-5 sm:px-8 md:px-12 will-change-transform"
       >
         <h1 className="font-display font-bold leading-[1.05] text-ink text-[clamp(22px,3.8vw,58px)] mb-4 whitespace-nowrap">
-          Natural Glow, Made for Your Skin
+          {["Natural", "Glow,", "Made", "for", "Your", "Skin"].map((word, i, arr) => (
+            <span key={i} className="hero-word inline-block">
+              {word}{i < arr.length - 1 ? " " : ""}
+            </span>
+          ))}
         </h1>
-        <p className="text-mid mx-auto leading-relaxed mb-8 sm:mb-10 text-[clamp(12px,1.3vw,17px)] whitespace-nowrap">
+        <p className="hero-sub text-mid mx-auto leading-relaxed mb-8 sm:mb-10 text-[clamp(12px,1.3vw,17px)] whitespace-nowrap">
           A creamy blush that blends effortlessly and flatters every Cambodian skin tone.
         </p>
-        <a href="#products" className="liquid-glass-btn">
+        <a href="#products" className="hero-btn liquid-glass-btn group/btn inline-flex items-center">
+          <span className="inline-flex items-center justify-center overflow-hidden max-w-0 group-hover/btn:max-w-[16px] opacity-0 group-hover/btn:opacity-100 group-hover/btn:mr-2 transition-all duration-300 ease-out shrink-0">
+            <Image src="/assets/cart.svg" alt="" width={20} height={20} className="invert shrink-0" />
+          </span>
           Order Now
         </a>
       </div>

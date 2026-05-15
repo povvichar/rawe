@@ -44,7 +44,19 @@ export function useCart() {
     write(cur);
   }, []);
 
+  const remove = useCallback((shadeId: string) => {
+    write(read().filter((c) => c.shadeId !== shadeId));
+  }, []);
+
+  const changeQty = useCallback((shadeId: string, delta: number) => {
+    const cur = read();
+    const i = cur.findIndex((c) => c.shadeId === shadeId);
+    if (i < 0) return;
+    cur[i].qty = Math.max(1, cur[i].qty + delta);
+    write(cur);
+  }, []);
+
   const count = items.reduce((n, i) => n + i.qty, 0);
 
-  return { items, add, count };
+  return { items, add, remove, changeQty, count };
 }

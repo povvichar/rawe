@@ -5,43 +5,53 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
 import { shades, type Shade } from "@/data/shades";
 import { useCart } from "@/lib/cart";
+import { useToast } from "@/lib/toast";
+import Link from "next/link";
 
 function ShadeCard({ shade }: { shade: Shade }) {
   const { add } = useCart();
+  const { show } = useToast();
   return (
-    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#f9f9f9]">
-      {/* Full-bleed image */}
-      <Image
-        src={shade.image}
-        alt={shade.name}
-        fill
-        sizes="(max-width: 768px) 50vw, 25vw"
-        className="object-cover scale-90 transition-transform duration-500 ease-out group-hover:scale-95"
-      />
+    <Link href={`/products/${shade.id}`}>
+      <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#f9f9f9]">
+        {/* Default image */}
+        <Image
+          src={shade.image}
+          alt={shade.name}
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover scale-90 transition-all duration-500 ease-out group-hover:scale-95"
+        />
+        {/* Hover image — crossfades in */}
+        <Image
+          src={shade.hoverImage}
+          alt=""
+          fill
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover scale-95 opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:duration-300"
+        />
 
-      {/* Title + price overlay — visible by default, hidden on hover */}
-      <div className="absolute inset-x-0 bottom-[2px] px-4 pb-4 flex flex-col gap-0 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
-        <p className="font-display text-base uppercase font-medium text-ink tracking-[0.15em]">{shade.name}</p>
-        <p className="text-lg font-base text-ink/70">${shade.priceUSD}.00</p>
-      </div>
+        {/* Title + price overlay — visible by default, hidden on hover */}
+        <div className="absolute inset-x-0 bottom-[2px] px-4 pb-4 flex flex-col gap-0 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
+          <p className="font-display text-base uppercase font-medium text-ink tracking-[0.15em]">{shade.name}</p>
+          <p className="text-lg font-base text-ink/70">${shade.priceUSD}.00</p>
+        </div>
 
-      {/* Add to Cart button — hidden by default, shown on hover */}
-      <div className="absolute inset-x-0 bottom-[6px] flex justify-center pb-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
-        <button
-          onClick={() =>
-            add({
-              shadeId: shade.id,
-              name: shade.name,
-              hex: shade.hex,
-              priceUSD: shade.priceUSD,
-            })
-          }
-          className="rounded-full border border-ink bg-white/80 backdrop-blur-sm text-ink text-xs tracking-[0.15em] uppercase px-6 py-2.5 hover:bg-ink hover:text-white transition-colors duration-200"
-        >
-          Add to Cart · ${shade.priceUSD}
-        </button>
-      </div>
-    </article>
+        {/* Add to Cart button — hidden by default, shown on hover */}
+        <div className="absolute inset-x-0 bottom-[6px] flex justify-center pb-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              add({ shadeId: shade.id, name: shade.name, hex: shade.hex, priceUSD: shade.priceUSD });
+              show(shade.name, shade.hex);
+            }}
+            className="rounded-full  bg-white/80 backdrop-blur-sm text-ink text-xs tracking-[0.15em] uppercase px-6 py-2.5 hover:bg-ink hover:text-white transition-colors duration-200"
+          >
+            Add to Cart · ${shade.priceUSD}
+          </button>
+        </div>
+      </article>
+    </Link>
   );
 }
 
@@ -72,21 +82,16 @@ export default function ProductsSection() {
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        ".products-title-block",
-        { opacity: 0, y: 40 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: ref.current,
-            start: "top 110%",
-            once: true,
-          },
-        }
-      );
+      gsap.set(".section-word", { opacity: 0, y: 20 });
+      gsap.to(".section-word", {
+        opacity: 1,
+        y: 0,
+        duration: 0.45,
+        stagger: 0.08,
+        delay: 0.3,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ref.current, start: "top 110%", once: true },
+      });
       gsap.fromTo(
         ".shade-card",
         { opacity: 0, y: 40 },
@@ -116,12 +121,20 @@ export default function ProductsSection() {
       className="relative bg-products pt-2 pb-24 md:pt-2 md:pb-16"
     >
       {/* Title */}
-      <div className="products-title-block text-center px-5 sm:px-8 md:px-12 mb-12 sm:mb-18">
+      <div className="text-center px-5 sm:px-8 md:px-12 mb-12 sm:mb-18">
         <p className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-mid mb-2 sm:mb-3">
-          The Collection
+          {["The", "Collection"].map((word, i, arr) => (
+            <span key={i} className="section-word inline-block">
+              {word}{i < arr.length - 1 ? " " : ""}
+            </span>
+          ))}
         </p>
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
-          Our Products
+          {["Our", "Products"].map((word, i, arr) => (
+            <span key={i} className="section-word inline-block">
+              {word}{i < arr.length - 1 ? " " : ""}
+            </span>
+          ))}
         </h2>
       </div>
 

@@ -34,8 +34,9 @@ export default function Footer() {
             <ul className="space-y-4 text-base font-display font-light text-ink">
               {nav.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:opacity-60 transition-opacity duration-200">
+                  <Link href={l.href} className="relative group inline-block hover:text-ink/60 transition-colors duration-300">
                     {l.label}
+                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
                   </Link>
                 </li>
               ))}
@@ -51,10 +52,11 @@ export default function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 hover:opacity-60 transition-opacity duration-200"
+                    className="relative group inline-flex items-center gap-2.5 hover:text-ink/60 transition-colors duration-300"
                   >
                     <Image src={s.icon} alt={s.label} width={16} height={16} className="opacity-80" />
                     {s.label}
+                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
                   </a>
                 </li>
               ))}
@@ -66,8 +68,9 @@ export default function Footer() {
             <ul className="space-y-4 text-base font-display font-light text-ink">
               {legal.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:opacity-60 transition-opacity duration-200">
+                  <Link href={l.href} className="relative group inline-block hover:text-ink/60 transition-colors duration-300">
                     {l.label}
+                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
                   </Link>
                 </li>
               ))}
