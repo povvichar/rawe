@@ -9,24 +9,24 @@ import { useCart } from "@/lib/cart";
 function ShadeCard({ shade }: { shade: Shade }) {
   const { add } = useCart();
   return (
-    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-white">
+    <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#f9f9f9]">
       {/* Full-bleed image */}
       <Image
         src={shade.image}
         alt={shade.name}
         fill
         sizes="(max-width: 768px) 50vw, 25vw"
-        className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        className="object-cover scale-90 transition-transform duration-500 ease-out group-hover:scale-95"
       />
 
       {/* Title + price overlay — visible by default, hidden on hover */}
-      <div className="absolute inset-x-0 bottom-[10px] px-4 pb-4 flex flex-col gap-1 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
+      <div className="absolute inset-x-0 bottom-[2px] px-4 pb-4 flex flex-col gap-0 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
         <p className="font-display text-base uppercase font-medium text-ink tracking-[0.15em]">{shade.name}</p>
         <p className="text-lg font-base text-ink/70">${shade.priceUSD}.00</p>
       </div>
 
       {/* Add to Cart button — hidden by default, shown on hover */}
-      <div className="absolute inset-x-0 bottom-[10px] flex justify-center pb-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
+      <div className="absolute inset-x-0 bottom-[6px] flex justify-center pb-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
         <button
           onClick={() =>
             add({
@@ -50,6 +50,13 @@ export default function ProductsSection() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
   const [animating, setAnimating] = useState(false);
+  const [pulsing, setPulsing] = useState(false);
+
+  const triggerPulse = () => {
+    setPulsing(false);
+    requestAnimationFrame(() => requestAnimationFrame(() => setPulsing(true)));
+    setTimeout(() => setPulsing(false), 650);
+  };
   const perPage = 4;
   const totalPages = Math.ceil(shades.length / perPage);
 
@@ -136,9 +143,9 @@ export default function ProductsSection() {
               {/* Next arrow floats centered on the last card */}
               {i === visible.length - 1 && page < totalPages - 1 && (
                 <button
-                  onClick={() => goTo(1)}
+                  onClick={() => { triggerPulse(); goTo(1); }}
                   aria-label="Next products"
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:-translate-y-1/2 hover:scale-110"
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     border: "1px solid rgba(255,255,255,0.6)",
@@ -155,9 +162,9 @@ export default function ProductsSection() {
               {/* Prev arrow floats centered on the first card */}
               {i === 0 && page > 0 && (
                 <button
-                  onClick={() => goTo(-1)}
+                  onClick={() => { triggerPulse(); goTo(-1); }}
                   aria-label="Previous products"
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110"
+                  className={`absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     border: "1px solid rgba(255,255,255,0.6)",

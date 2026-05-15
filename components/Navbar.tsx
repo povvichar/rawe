@@ -31,7 +31,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out
-        ${scrolled ? "backdrop-blur-md bg-white/​60 border-b border-black/5" : "bg-transparent"}
+        ${scrolled ? "backdrop-blur-md bg-white/​50 border-b border-black/1" : "bg-transparent"}
         ${hidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}
       `}
     >
@@ -40,7 +40,7 @@ export default function Navbar() {
           <Image src="/assets/logo-circle.svg" alt="RAWE" width={48} height={48} priority />
         </Link>
 
-        <ul className="hidden md:flex items-center gap-12 text-lg text-mid">
+        <ul className="hidden md:flex items-center gap-12 text-base">
           {nav.links.map((l) => (
             <li key={l.href}>
               <Link

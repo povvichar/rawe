@@ -1,28 +1,40 @@
 import Link from "next/link";
+import Image from "next/image";
 import { nav, site } from "@/data/site";
+
+const socials = [
+  { label: "Tiktok",    href: site.social.tiktok,    icon: "/assets/tiktok.svg" },
+  { label: "Instagram", href: site.social.instagram,  icon: "/assets/ig.svg" },
+  { label: "Facebook",  href: site.social.facebook,   icon: "/assets/fb.svg" },
+];
+
+const legal = [
+  { label: "Returns & Refunds", href: "/returns" },
+  { label: "FAQs",              href: "/faqs" },
+  { label: "Privacy Policy",    href: "/privacy" },
+  { label: "Terms & Conditions",href: "/terms" },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-white/60">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 md:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10">
-          <div className="col-span-2 md:col-span-1">
-            <p className="font-display text-2xl text-white font-light tracking-[0.3em]">
-              {site.name}
-            </p>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed">
-              A natural glow brand made for Cambodian skin tones.
-            </p>
+    <footer style={{ backgroundColor: "#F5F5F5" }} className="text-ink">
+      <div className="mx-auto max-w-7xl px-8 md:px-14 py-14 md:py-16">
+        <div className="flex flex-col md:flex-row md:justify-between gap-10 md:gap-8">
+
+          {/* Logo */}
+          <div className="flex flex-col items-start">
+            <Image src="/assets/vertical-logo.svg" alt="RAWE" width={108} height={108} style={{ opacity: 0.7 }} />
           </div>
 
+          {/* Right columns */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-16">
+
+          {/* Nav links */}
           <div>
-            <p className="text-white/80 text-sm uppercase tracking-widest mb-4">
-              Shop
-            </p>
-            <ul className="space-y-2 text-sm text-white/40">
+            <ul className="space-y-4 text-base font-display font-light text-ink">
               {nav.links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="hover:text-white transition">
+                  <Link href={l.href} className="hover:opacity-60 transition-opacity duration-200">
                     {l.label}
                   </Link>
                 </li>
@@ -30,50 +42,46 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Social links */}
           <div>
-            <p className="text-white/80 text-sm uppercase tracking-widest mb-4">
-              Follow
-            </p>
-            <ul className="space-y-2 text-sm text-white/40">
-              <li>
-                <a
-                  href={site.social.instagram}
-                  className="hover:text-white transition"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a
-                  href={site.social.tiktok}
-                  className="hover:text-white transition"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  TikTok
-                </a>
-              </li>
-              <li>
-                <a
-                  href={site.social.facebook}
-                  className="hover:text-white transition"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Facebook
-                </a>
-              </li>
+            <ul className="space-y-4 text-base font-display font-light text-ink">
+              {socials.map((s) => (
+                <li key={s.label}>
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 hover:opacity-60 transition-opacity duration-200"
+                  >
+                    <Image src={s.icon} alt={s.label} width={16} height={16} className="opacity-80" />
+                    {s.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
+
+          {/* Legal links */}
+          <div>
+            <ul className="space-y-4 text-base font-display font-light text-ink">
+              {legal.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="hover:opacity-60 transition-opacity duration-200">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          </div>{/* end right columns */}
         </div>
 
-        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs text-white/40 gap-3">
-          <p>© {new Date().getFullYear()} RAWE. All rights reserved.</p>
-          <Link href="/privacy" className="hover:text-white transition">
-            Privacy Policy
-          </Link>
+        {/* Bottom bar */}
+        <div className="mt-12 pt-6 border-t border-ink/10 flex justify-center">
+          <p className="text-sm text-ink/50">
+            © {new Date().getFullYear()} RAWE. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

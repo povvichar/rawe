@@ -1,85 +1,110 @@
 "use client";
 import { useRef } from "react";
+import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
 import { site } from "@/data/site";
 
 const socials = [
-  { label: "Instagram", href: site.social.instagram },
-  { label: "TikTok", href: site.social.tiktok },
-  { label: "Facebook", href: site.social.facebook },
+  { label: "Instagram", handle: "@raweofficail", href: site.social.instagram, icon: "/assets/ig.svg" },
+  { label: "TikTok",    handle: "@raweofficail", href: site.social.tiktok,    icon: "/assets/tiktok.svg" },
+  { label: "Facebook",  handle: "@raweofficail", href: site.social.facebook,  icon: "/assets/fb.svg" },
 ];
 
-const tiles = [
-  { ratio: "aspect-[4/5]", tint: "#F2C5C0" },
-  { ratio: "aspect-square", tint: "#E8A4A0" },
-  { ratio: "aspect-[3/4]", tint: "#E8B89A" },
-  { ratio: "aspect-[3/4]", tint: "#C4909A" },
-  { ratio: "aspect-[4/5]", tint: "#D98C80" },
-  { ratio: "aspect-square", tint: "#B07088" },
+const photos = [
+  "/assets/social-media/img1.png",
+  "/assets/social-media/img2.png",
+  "/assets/social-media/img3.png",
+  "/assets/social-media/img4.png",
+  "/assets/social-media/img5.png",
+  "/assets/social-media/img6.png",
 ];
 
 export default function CommunitySection() {
   const ref = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       gsap.fromTo(
-        ".gallery-tile",
+        ".community-title",
         { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          stagger: 0.06,
-          duration: 0.6,
+          duration: 0.7,
           ease: "power2.out",
-          scrollTrigger: { trigger: ref.current, start: "top 75%", once: true },
+          scrollTrigger: { trigger: ref.current, start: "top 85%", once: true },
         }
       );
+
+      const track = trackRef.current;
+      if (!track) return;
+
+      const totalWidth = track.scrollWidth / 2;
+      gsap.to(track, {
+        x: -totalWidth,
+        duration: 40,
+        ease: "none",
+        repeat: -1,
+        modifiers: {
+          x: gsap.utils.unitize((x) => parseFloat(x) % totalWidth),
+        },
+      });
     },
     { scope: ref }
   );
 
   return (
-    <section ref={ref} id="community" className="bg-hero py-16 sm:py-20 md:py-32">
-      <div className="mx-auto max-w-7xl px-5 sm:px-6 md:px-8">
-        <div className="text-center">
-          <h2 className="font-display text-3xl sm:text-4xl md:text-6xl font-light text-ink">
-            Loved by Our Community
-          </h2>
-          <p className="mt-3 text-xs sm:text-sm text-mid">
-            Follow us {site.social.handle}
-          </p>
-        </div>
+    <section ref={ref} id="community" className="bg-hero py-16 sm:py-20 md:py-28 overflow-hidden">
+      {/* Title */}
+      <div className="community-title text-center px-5 mb-10 sm:mb-12">
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
+          Loved by Our Community
+        </h2>
+       {/* <p className="mt-2 text-xs sm:text-sm text-mid">Follow us {site.social.handle}</p>*/}
+      </div>
 
-        <div className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-2 sm:gap-3">
-          {socials.map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full bg-white px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm text-ink hover:bg-accent hover:text-ink transition shadow-sm"
-            >
-              {s.label} · {site.social.handle}
-            </a>
-          ))}
-        </div>
+      {/* Social pills — liquid glass */}
+      <div className="community-title flex justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 px-5">
+        {socials.map((s) => (
+          <a
+            key={s.label}
+            href={s.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 sm:px-4 py-2 sm:py-1.5 rounded-full text-xs sm:text-sm text-ink transition-all duration-300 hover:scale-105"
+            style={{
+              background: "rgba(255,255,255,0.20)",
+              border: "0px solid rgba(255,255,255,0.4)",
+              backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+              WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
+              boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.75)",
+            }}
+          >
+            <Image src={s.icon} alt={s.label} width={16} height={16} />
+            <span>{s.handle}</span>
+          </a>
+        ))}
+      </div>
 
-        <div className="mt-10 sm:mt-14 columns-2 md:columns-3 gap-3 sm:gap-4 [column-fill:_balance]">
-          {tiles.map((t, i) => (
-            <a
+      {/* Infinite marquee gallery */}
+      <div className="relative w-full">
+        <div ref={trackRef} className="flex gap-4 w-max">
+          {[...photos, ...photos].map((src, i) => (
+            <div
               key={i}
-              href={site.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`gallery-tile group block mb-4 break-inside-avoid rounded-2xl overflow-hidden ${t.ratio} relative`}
-              style={{ backgroundColor: t.tint }}
+              className="relative flex-shrink-0 w-[250px] sm:w-[280px] md:w-[320px] aspect-square rounded-2xl overflow-hidden"
+              style={{ border: "6px solid rgba(255,255,255,0.35)", boxShadow: "none" }}
             >
-              <span className="absolute inset-0 flex items-center justify-center text-white/0 group-hover:text-white group-hover:bg-black/30 transition text-sm tracking-wide">
-                View Post
-              </span>
-            </a>
+              <Image
+                src={src}
+                alt={`Community photo ${(i % photos.length) + 1}`}
+                fill
+                sizes="380px"
+                className="object-cover"
+              />
+            </div>
           ))}
         </div>
       </div>
