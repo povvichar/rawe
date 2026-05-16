@@ -33,7 +33,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className="cart-toast flex items-center gap-3 px-4 py-3 rounded-full text-sm text-ink whitespace-nowrap"
+          className="cart-toast flex items-center gap-3 px-4 py-3 rounded-none text-sm text-ink whitespace-nowrap"
           style={{
             background: "rgba(255,255,255,0.38)",
             backdropFilter: "blur(28px) saturate(200%) brightness(1.06)",
@@ -64,7 +64,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={{ show }}>
       {children}
-      {mounted && createPortal(toastList, document.body)}
+      {mounted && createPortal(toastList, document.documentElement)}
     </Ctx.Provider>
   );
 }

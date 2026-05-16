@@ -37,13 +37,14 @@ export default function CartPage() {
     setForm((p) => ({ ...p, [k]: e.target.value }));
 
   const glassPanel = {
-    background: "rgba(255,255,255,0.1)",
-    backdropFilter: "blur(32px) saturate(180%) brightness(1.04)",
-    WebkitBackdropFilter: "blur(32px) saturate(180%) brightness(1.04)",
-    border: "1px solid rgba(255,255,255,0.35)",
+    background: "rgba(255,255,255,0.38)",
+    backdropFilter: "blur(48px) saturate(180%)",
+    WebkitBackdropFilter: "blur(48px) saturate(180%)",
+    border: "1px solid rgba(255,255,255,0.55)",
+   
   } as React.CSSProperties;
 
-  const inputCls = "w-full px-4 py-3 rounded-xl text-sm text-ink bg-white/60 border border-white/70 outline-none focus:border-ink/30 focus:bg-white/80 transition-all duration-200 placeholder:text-mid/60";
+  const inputCls = "w-full px-4 py-3 rounded-none text-sm text-ink bg-white/60 border border-white/70 outline-none focus:border-ink/30 focus:bg-white/80 transition-all duration-200 placeholder:text-mid/60";
 
   /* ── Steps indicator ── */
   const steps: Step[] = ["bag", "shipping", "payment"];
@@ -70,7 +71,7 @@ export default function CartPage() {
                   className={`flex items-center gap-2 text-xs tracking-[0.15em] uppercase transition-colors duration-200 ${step === s ? "text-ink" : steps.indexOf(step) > i ? "text-mid hover:text-ink" : "text-mid/40"}`}
                 >
                   <span
-                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] transition-all duration-300 ${step === s ? "bg-ink text-white" : steps.indexOf(step) > i ? "bg-ink/20 text-ink" : "bg-ink/8 text-mid/40"}`}
+                    className={`w-5 h-5 rounded-none flex items-center justify-center text-[10px] transition-all duration-300 ${step === s ? "bg-ink text-white" : steps.indexOf(step) > i ? "bg-ink/20 text-ink" : "bg-ink/8 text-mid/40"}`}
                   >
                     {steps.indexOf(step) > i ? "✓" : i + 1}
                   </span>
@@ -90,8 +91,8 @@ export default function CartPage() {
 
               {/* ── Step 1: Bag ── */}
               {step === "bag" && (
-                <div className="rounded-2xl overflow-hidden" style={glassPanel}>
-                  <div className="px-6 py-5 border-b border-white/40">
+                <div className="rounded-none overflow-hidden" style={glassPanel}>
+                  <div className="px-6 py-5 border-b border-ink/0.1">
                     <span className="font-display text-ink text-lg tracking-wide">My Bag</span>
                     {count > 0 && <span className="ml-2 text-xs text-mid">· {count} {count === 1 ? "item" : "items"}</span>}
                   </div>
@@ -110,7 +111,7 @@ export default function CartPage() {
                           style={{ borderBottom: idx < items.length - 1 ? "1px solid rgba(255,255,255,0.35)" : "none" }}
                         >
                           {/* Image */}
-                          <div className="relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-[#f9f9f9]">
+                          <div className="relative flex-shrink-0 w-16 h-16 rounded-none overflow-hidden bg-[#f9f9f9]">
                             {shadeImg[item.name]
                               ? <Image src={shadeImg[item.name]} alt={item.name} fill className="object-cover" sizes="64px" />
                               : <div className="w-full h-full" style={{ background: item.hex }} />
@@ -122,9 +123,9 @@ export default function CartPage() {
                             <p className="font-display text-ink text-sm">{item.name}</p>
                             <p className="text-mid text-xs mt-0.5">Creamy Blush Stick</p>
                             <div className="flex items-center gap-2 mt-2">
-                              <button onClick={() => changeQty(item.shadeId, -1)} className="w-6 h-6 rounded-full text-ink text-xs flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.70)" }}>−</button>
+                              <button onClick={() => changeQty(item.shadeId, -1)} className="w-6 h-6 rounded-none text-ink text-xs flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.70)" }}>−</button>
                               <span className="text-ink text-xs w-5 text-center">{item.qty}</span>
-                              <button onClick={() => changeQty(item.shadeId, 1)} className="w-6 h-6 rounded-full text-ink text-xs flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.70)" }}>+</button>
+                              <button onClick={() => changeQty(item.shadeId, 1)} className="w-6 h-6 rounded-none text-ink text-xs flex items-center justify-center hover:scale-110 transition-transform" style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.70)" }}>+</button>
                             </div>
                           </div>
 
@@ -139,7 +140,7 @@ export default function CartPage() {
                   )}
 
                   {items.length > 0 && (
-                    <div className="px-6 py-4 border-t border-white/40">
+                    <div className="px-6 py-4">
                       <button
                         onClick={() => setStep("shipping")}
                         className="liquid-glass-btn w-full justify-center py-3.5 text-sm"
@@ -153,7 +154,7 @@ export default function CartPage() {
 
               {/* ── Step 2: Shipping ── */}
               {step === "shipping" && (
-                <div className="rounded-2xl overflow-hidden" style={glassPanel}>
+                <div className="rounded-none overflow-hidden" style={glassPanel}>
                   <div className="px-6 py-5 border-b border-white/40 flex items-center gap-3">
                     <button onClick={() => setStep("bag")} className="text-xs text-mid hover:text-ink transition-colors duration-200 tracking-[0.1em] uppercase">←</button>
                     <span className="font-display text-ink text-lg tracking-wide">Shipping Details</span>
@@ -204,7 +205,7 @@ export default function CartPage() {
 
               {/* ── Step 3: Payment ── */}
               {step === "payment" && (
-                <div className="rounded-2xl overflow-hidden" style={glassPanel}>
+                <div className="rounded-none overflow-hidden" style={glassPanel}>
                   <div className="px-6 py-5 border-b border-white/40 flex items-center gap-3">
                     <button onClick={() => setStep("shipping")} className="text-xs text-mid hover:text-ink transition-colors duration-200 tracking-[0.1em] uppercase">←</button>
                     <span className="font-display text-ink text-lg tracking-wide">Payment</span>
@@ -216,10 +217,19 @@ export default function CartPage() {
                       <button
                         key={m}
                         onClick={() => setPayMethod(m)}
-                        className={`flex-1 py-3 rounded-xl text-xs tracking-[0.15em] uppercase font-medium transition-all duration-200 ${payMethod === m ? "bg-ink text-white" : "text-mid hover:text-ink"}`}
+                        className={`flex-1 py-3 rounded-none flex items-center justify-center gap-2 transition-all duration-200 ${payMethod === m ? "bg-ink" : "hover:bg-white/60"}`}
                         style={payMethod !== m ? { background: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.60)" } : {}}
                       >
-                        {m === "khqr" ? "KHQR" : "ABA Pay"}
+                        <Image
+                          src={m === "khqr" ? "/assets/KHQR.png" : "/assets/ABA.png"}
+                          alt=""
+                          width={m === "khqr" ? 48 : 44}
+                          height={20}
+                          className="object-contain"
+                        />
+                        <span className={`text-xs tracking-[0.15em] uppercase font-medium ${payMethod === m ? "text-white" : "text-mid"}`}>
+                          {m === "khqr" ? "KHQR" : "ABA Pay"}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -233,7 +243,7 @@ export default function CartPage() {
                         </p>
                         {/* QR placeholder */}
                         <div
-                          className="w-52 h-52 rounded-2xl flex items-center justify-center relative overflow-hidden"
+                          className="w-52 h-52 rounded-none flex items-center justify-center relative overflow-hidden"
                           style={{ background: "rgba(255,255,255,0.70)", border: "1px solid rgba(255,255,255,0.80)" }}
                         >
                           {/* Decorative QR grid */}
@@ -266,7 +276,7 @@ export default function CartPage() {
                           <p className="text-[10px] text-mid tracking-wide">Valid for this session only</p>
                         </div>
                         <div
-                          className="w-full rounded-xl px-4 py-3 flex items-center gap-3"
+                          className="w-full rounded-none px-4 py-3 flex items-center gap-3"
                           style={{ background: "rgba(255,255,255,0.50)", border: "1px solid rgba(255,255,255,0.70)" }}
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm0 3v4l3 1.5" stroke="#6b6b6b" strokeWidth="1.3" strokeLinecap="round"/></svg>
@@ -290,7 +300,7 @@ export default function CartPage() {
                         ].map(({ label, value }) => (
                           <div
                             key={label}
-                            className="flex justify-between items-center px-4 py-3 rounded-xl"
+                            className="flex justify-between items-center px-4 py-3 rounded-none"
                             style={{ background: "rgba(255,255,255,0.50)", border: "1px solid rgba(255,255,255,0.70)" }}
                           >
                             <span className="text-xs text-mid">{label}</span>
@@ -298,7 +308,7 @@ export default function CartPage() {
                           </div>
                         ))}
                         <div
-                          className="rounded-xl px-4 py-3 flex items-start gap-3"
+                          className="rounded-none px-4 py-3 flex items-start gap-3"
                           style={{ background: "rgba(234,148,173,0.12)", border: "1px solid rgba(234,148,173,0.30)" }}
                         >
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="mt-0.5 flex-shrink-0"><circle cx="7" cy="7" r="6" stroke="#ea94ad" strokeWidth="1.2"/><path d="M7 4v3.5M7 9.5v.5" stroke="#ea94ad" strokeWidth="1.3" strokeLinecap="round"/></svg>
@@ -319,16 +329,16 @@ export default function CartPage() {
 
             {/* ── Right: Order summary ── */}
             <div className="w-full lg:w-[300px] flex-shrink-0">
-              <div className="rounded-2xl overflow-hidden sticky top-24" style={glassPanel}>
+              <div className="rounded-none overflow-hidden sticky top-24" style={glassPanel}>
                 <div className="px-5 py-4 border-b border-white/40">
                   <span className="font-display text-ink text-lg tracking-wide">Order Summary</span>
                 </div>
 
                 {/* Mini item list */}
-                <ul className="px-5 py-3 space-y-3">
+                <ul className="px-5 py-4 space-y-4">
                   {items.map((item) => (
                     <li key={item.shadeId} className="flex items-center gap-3">
-                      <div className="relative w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-[#f9f9f9]">
+                      <div className="relative w-9 h-9 rounded-none overflow-hidden flex-shrink-0 bg-[#f9f9f9]">
                         {shadeImg[item.name]
                           ? <Image src={shadeImg[item.name]} alt={item.name} fill className="object-cover" sizes="36px" />
                           : <div className="w-full h-full" style={{ background: item.hex }} />
@@ -344,7 +354,7 @@ export default function CartPage() {
                 </ul>
 
                 {/* Totals */}
-                <div className="px-5 py-4 border-t border-white/40 space-y-2.5">
+                <div className="px-5 py-5 border-t border-white/40 space-y-4">
                   <div className="flex justify-between text-sm">
                     <span className="text-mid">Subtotal</span>
                     <span className="font-sans text-ink">${subtotal.toFixed(2)}</span>
@@ -364,10 +374,10 @@ export default function CartPage() {
                 <div className="px-5 pb-5">
                   <div className="flex gap-2">
                     <input
-                      className="flex-1 px-3 py-2 rounded-xl text-xs text-ink bg-white/50 border border-white/60 outline-none focus:border-ink/30 placeholder:text-mid/50 transition-all"
+                      className="flex-1 px-3 py-2 rounded-none text-xs text-ink bg-white/50 border border-white/60 outline-none focus:border-ink/30 placeholder:text-mid/50 transition-all"
                       placeholder="Promo code"
                     />
-                    <button className="px-3 py-2 rounded-xl text-xs text-ink font-medium hover:bg-white/60 transition-colors" style={{ background: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.60)" }}>
+                    <button className="px-3 py-2 rounded-none text-xs text-ink font-medium hover:bg-white/60 transition-colors" style={{ background: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.60)" }}>
                       Apply
                     </button>
                   </div>

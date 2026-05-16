@@ -10,8 +10,19 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [cartPop, setCartPop] = useState(false);
   const lastY = useRef(0);
   const { count } = useCart();
+
+  useEffect(() => {
+    const onAdd = () => {
+      setCartPop(false);
+      requestAnimationFrame(() => requestAnimationFrame(() => setCartPop(true)));
+      setTimeout(() => setCartPop(false), 600);
+    };
+    window.addEventListener("rawe:cart", onAdd);
+    return () => window.removeEventListener("rawe:cart", onAdd);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
@@ -33,7 +44,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out
-        ${scrolled ? "backdrop-blur-md bg-white/​50 border-b border-black/1" : "bg-transparent"}
+        ${scrolled ? "backdrop-blur-md bg-white/​50  border-black/1" : "bg-transparent"}
         ${hidden ? "-translate-y-full opacity-0 pointer-events-none" : "translate-y-0 opacity-100"}
       `}
     >
@@ -47,7 +58,7 @@ export default function Navbar() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="relative group inline-block font-display text-mid hover:text-ink transition-colors duration-300"
+                className="relative group inline-block font-display hover:text-ink transition-colors duration-300"
               >
                 {l.label}
                 <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
@@ -68,7 +79,7 @@ export default function Navbar() {
             <button
               onClick={() => setCartOpen((v) => !v)}
               aria-label="Cart"
-              className="relative p-2 transition-all duration-300 hover:opacity-60 hover:scale-110"
+              className={`relative p-2 transition-all duration-300 hover:opacity-60 hover:scale-110 ${cartPop ? "cart-pop" : ""}`}
             >
               <Image src="/assets/cart.svg" width={20} height={20} alt="" />
               {count > 0 && (

@@ -47,6 +47,20 @@ export default function CommunitySection() {
         scrollTrigger: { trigger: ref.current, start: "top 75%", once: true },
       });
 
+      gsap.fromTo(
+        ".community-card",
+        { opacity: 0, y: 64, scale: 0.92 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.14,
+          duration: 1.1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ref.current, start: "top 90%", once: true },
+        }
+      );
+
       const track = trackRef.current;
       if (!track) return;
 
@@ -69,9 +83,9 @@ export default function CommunitySection() {
       {/* Title */}
       <div className="text-center px-5 mb-10 sm:mb-12">
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
-          {["Loved", "by", "Our", "Community"].map((word, i, arr) => (
-            <span key={i} className="section-word inline-block">
-              {word}{i < arr.length - 1 ? " " : ""}
+          {["Loved", "by", "Our", "Community"].map((word, i) => (
+            <span key={i} className="section-word inline-block mr-[0.22em]">
+              {word}
             </span>
           ))}
         </h2>
@@ -86,7 +100,7 @@ export default function CommunitySection() {
             href={s.href}
             target="_blank"
             rel="noopener noreferrer"
-            className="social-pill-btn flex items-center gap-2 px-4 sm:px-4 py-2 sm:py-1.5 rounded-full text-xs sm:text-sm text-ink"
+            className="social-pill-btn flex items-center gap-2 px-4 sm:px-4 py-2 sm:py-1.5 rounded-none text-xs sm:text-sm text-ink"
           >
             <Image src={s.icon} alt={s.label} width={16} height={16} />
             <span>{s.handle}</span>
@@ -96,12 +110,12 @@ export default function CommunitySection() {
 
       {/* Infinite marquee gallery */}
       <div className="relative w-full">
-        <div ref={trackRef} className="flex gap-4 w-max">
+        <div ref={trackRef} className="flex gap-0 w-max">
           {[...photos, ...photos].map((src, i) => (
             <div
               key={i}
-              className="relative flex-shrink-0 w-[250px] sm:w-[280px] md:w-[320px] aspect-square rounded-2xl overflow-hidden"
-              style={{ border: "6px solid rgba(255,255,255,0.35)", boxShadow: "none" }}
+              className={`community-card relative flex-shrink-0 w-[224px] sm:w-[248px] md:w-[320px] aspect-[4/5] overflow-hidden`}
+              style={{ border: "1px solid rgba(255,255,255,0.35)", boxShadow: "none", opacity: 0 }}
             >
               <Image
                 src={src}

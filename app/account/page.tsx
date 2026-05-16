@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
 
-type Tab    = "login" | "register";
+type Tab    = "login" | "register" | "forgot";
 type View   = "profile" | "orders";
 
 type User = {
@@ -76,7 +76,7 @@ const glassCard = {
 } as React.CSSProperties;
 
 const glassInput =
-  "w-full rounded-2xl px-5 py-3.5 text-sm text-ink placeholder:text-mid/60 outline-none transition-all duration-200 focus:ring-2 focus:ring-black/10 bg-white/50 border border-white/60 backdrop-blur-sm";
+  "w-full rounded-none px-5 py-3.5 text-sm text-ink placeholder:text-mid/60 outline-none transition-all duration-200 focus:ring-2 focus:ring-black/10 bg-white/50 border border-white/60 backdrop-blur-sm";
 
 const statusStyle: Record<string, string> = {
   Delivered: "text-emerald-600 bg-emerald-50/80",
@@ -94,6 +94,8 @@ export default function AccountPage() {
   const [error,        setError]        = useState("");
   const [user,         setUser]         = useState<User | null>(null);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [forgotEmail,  setForgotEmail]  = useState("");
+  const [forgotSent,   setForgotSent]   = useState(false);
 
   useGSAP(() => {
     gsap.fromTo(".account-panel",
@@ -169,6 +171,13 @@ export default function AccountPage() {
     });
   };
 
+  const handleForgot = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!forgotEmail) { setError("Please enter your email."); return; }
+    setError("");
+    setForgotSent(true);
+  };
+
   const handleSignOut = () => {
     gsap.to(".account-panel", {
       opacity: 0, y: 12, scale: 0.97, duration: 0.3, ease: "power2.in",
@@ -214,7 +223,7 @@ export default function AccountPage() {
           </div>
         )}
 
-        <div className="account-panel rounded-3xl p-8 sm:p-10" style={glassPanel}>
+        <div className="account-panel rounded-none p-8 sm:p-10" style={glassPanel}>
 
           {user ? (
             <div className="view-content">
@@ -224,30 +233,30 @@ export default function AccountPage() {
                 <div className="space-y-5">
 
                   {/* Header */}
-                  <div className="flex items-center gap-4 pb-5 border-b border-black/6">
+                  <div className="flex items-center gap-4 pb-6 border-b border-black/6">
                     <div
-                      className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-2xl font-display text-ink"
-                      style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5))", border: "1px solid rgba(255,255,255,0.9)", boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}
+                      className="w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center text-3xl font-display text-ink"
+                      style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5))", border: "1px solid rgba(255,255,255,0.9)"}}
                     >
                       {user.name.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-display text-ink text-lg leading-tight truncate">{user.name}</p>
-                      <p className="text-[11px] text-mid/70 mt-0.5 truncate">{user.email}</p>
+                      <p className="font-display text-ink text-2xl leading-tight tracking-wide truncate">{user.name}</p>
+                      <p className="text-xs text-mid/60 mt-1 tracking-[0.08em] truncate">{user.email}</p>
                     </div>
                   </div>
 
                   {/* Info grid */}
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     {[
                       { label: "Member Since", value: user.joinedDate },
                       { label: "Location",     value: user.location   },
                       { label: "Total Orders", value: `${FAKE_ORDERS.length} orders` },
                       { label: "Total Spent",  value: `$${FAKE_ORDERS.reduce((s, o) => s + o.total, 0)}.00` },
                     ].map(({ label, value }) => (
-                      <div key={label} className="rounded-2xl p-3.5 flex flex-col gap-1" style={glassCard}>
-                        <span className="text-[9px] tracking-[0.25em] uppercase text-mid/60">{label}</span>
-                        <span className="text-sm text-ink font-display">{value}</span>
+                      <div key={label} className="rounded-none p-4 flex flex-col gap-1.5" style={glassCard}>
+                        <span className="text-[9px] tracking-[0.3em] uppercase text-mid/50">{label}</span>
+                        <span className="text-sm text-ink font-sans font-normal leading-tight">{value}</span>
                       </div>
                     ))}
                   </div>
@@ -255,18 +264,16 @@ export default function AccountPage() {
                   {/* Order History row — clickable */}
                   <button
                     onClick={() => switchView("orders")}
-                    className="w-full flex items-center justify-between px-4 py-4 rounded-2xl group transition-all duration-200"
+                    className="w-full flex items-center justify-between px-5 py-4 rounded-none group transition-all duration-200"
                     style={glassCard}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: "rgba(0,0,0,0.05)" }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
-                        </svg>
+                      <div className="w-9 h-9 rounded-none flex items-center justify-center" style={{ background: "rgba(0,0,0,0.05)" }}>
+                        <Image src="/assets/shopping-history.svg" alt="" width={18} height={18} />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm text-ink">Order History</p>
-                        <p className="text-[10px] text-mid/60 mt-0.5">{FAKE_ORDERS.length} past orders</p>
+                        <p className="font-sans text-sm text-ink tracking-wide">Order History</p>
+                        <p className="text-[10px] text-mid/50 mt-0.5 tracking-[0.08em]">{FAKE_ORDERS.length} past orders</p>
                       </div>
                     </div>
                     <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="text-mid/40 group-hover:text-ink group-hover:translate-x-0.5 transition-all duration-200">
@@ -281,7 +288,7 @@ export default function AccountPage() {
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="w-full py-3 rounded-full text-[11px] tracking-[0.2em] uppercase text-mid/50 hover:text-red-500 transition-colors duration-200"
+                      className="w-full py-3 rounded-none text-[11px] tracking-[0.2em] uppercase text-mid/50 hover:text-red-500 transition-colors duration-200"
                     >
                       Sign Out
                     </button>
@@ -296,7 +303,7 @@ export default function AccountPage() {
                   <div className="flex items-center gap-3 pb-4 border-b border-black/6">
                     <button
                       onClick={() => switchView("profile")}
-                      className="w-8 h-8 rounded-xl flex items-center justify-center transition-colors hover:bg-black/5"
+                      className="w-8 h-8 rounded-none flex items-center justify-center transition-colors hover:bg-black/5"
                       aria-label="Back to profile"
                     >
                       <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
@@ -314,7 +321,7 @@ export default function AccountPage() {
                     {FAKE_ORDERS.map((order) => {
                       const open = expandedOrder === order.id;
                       return (
-                        <div key={order.id} className="rounded-2xl overflow-hidden" style={glassCard}>
+                        <div key={order.id} className="rounded-none overflow-hidden" style={glassCard}>
                           {/* Row */}
                           <button
                             className="w-full flex items-center justify-between px-4 py-3.5 text-left"
@@ -324,7 +331,7 @@ export default function AccountPage() {
                               {/* Shade dots */}
                               <div className="flex -space-x-1.5">
                                 {order.items.slice(0, 3).map((item) => (
-                                  <div key={item.name} className="w-5 h-5 rounded-full border-2 border-white flex-shrink-0" style={{ background: item.hex }} />
+                                  <div key={item.name} className="w-5 h-5 rounded-none border-2 border-white flex-shrink-0" style={{ background: item.hex }} />
                                 ))}
                               </div>
                               <div>
@@ -350,7 +357,7 @@ export default function AccountPage() {
                                 {order.items.map((item) => (
                                   <div key={item.name} className="flex items-center justify-between">
                                     <div className="flex items-center gap-2.5">
-                                      <div className="w-4 h-4 rounded-full border border-white/80" style={{ background: item.hex }} />
+                                      <div className="w-4 h-4 rounded-none border border-white/80" style={{ background: item.hex }} />
                                       <span className="text-sm text-ink">{item.name}</span>
                                       <span className="text-[11px] text-mid/50">×{item.qty}</span>
                                     </div>
@@ -363,7 +370,7 @@ export default function AccountPage() {
                                   <p className="text-[10px] tracking-[0.2em] uppercase text-mid/60">Delivered to</p>
                                   <p className="text-sm text-ink mt-0.5">{order.address}</p>
                                 </div>
-                                <span className={`text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rounded-full ${statusStyle[order.status]}`}>
+                                <span className={`text-[10px] tracking-[0.15em] uppercase px-2.5 py-1 rounded-none ${statusStyle[order.status]}`}>
                                   {order.status}
                                 </span>
                               </div>
@@ -380,27 +387,78 @@ export default function AccountPage() {
           ) : (
             /* ── Auth view ── */
             <>
-              <div className="flex rounded-2xl p-1 mb-8" style={{ background: "rgba(0,0,0,0.05)" }}>
-                {(["login", "register"] as Tab[]).map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => switchTab(t)}
-                    className="flex-1 py-2.5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-display transition-all duration-300"
-                    style={
-                      tab === t
-                        ? { background: "rgba(255,255,255,0.85)", color: "#1a1a1a", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }
-                        : { color: "#6b6b6b" }
-                    }
-                  >
-                    {t === "login" ? "Sign In" : "Create Account"}
-                  </button>
-                ))}
-              </div>
+              {tab !== "forgot" && (
+                <div className="flex rounded-none p-1 mb-8" style={{ background: "rgba(0,0,0,0.05)" }}>
+                  {(["login", "register"] as Tab[]).map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => switchTab(t)}
+                      className="flex-1 py-2.5 rounded-none text-[11px] tracking-[0.2em] uppercase font-display transition-all duration-300"
+                      style={
+                        tab === t
+                          ? { background: "rgba(255,255,255,0.85)", color: "#1a1a1a", boxShadow: "0 2px 10px rgba(0,0,0,0.08)" }
+                          : { color: "#6b6b6b" }
+                      }
+                    >
+                      {t === "login" ? "Sign In" : "Create Account"}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {error && <p className="text-[11px] text-red-500/80 text-center mb-4 tracking-wide">{error}</p>}
 
               <div className="tab-content">
-                {tab === "login" ? (
+                {tab === "forgot" ? (
+                  forgotSent ? (
+                    <div className="flex flex-col items-center text-center gap-4 py-4">
+                      <div className="w-12 h-12 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.80)" }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a1a1a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-display text-ink text-base tracking-wide">Check your inbox</p>
+                        <p className="text-[11px] text-mid/60 mt-1.5 leading-relaxed">
+                          We sent a reset link to<br />
+                          <span className="text-ink font-mono">{forgotEmail}</span>
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setForgotSent(false); setForgotEmail(""); switchTab("login"); }}
+                        className="text-[11px] text-ink underline underline-offset-2 mt-2"
+                      >
+                        Back to sign in
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleForgot} className="space-y-5">
+                      <div>
+                        <p className="font-display text-ink text-base tracking-wide mb-1">Reset your password</p>
+                        <p className="text-[11px] text-mid/60 leading-relaxed">Enter your email and we'll send you a link to reset your password.</p>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] tracking-[0.25em] uppercase text-mid">Email</label>
+                        <input
+                          type="email"
+                          placeholder="your@email.com"
+                          className={glassInput}
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                        />
+                      </div>
+                      <button type="submit" className="liquid-glass-btn w-full justify-center text-sm py-3">Send Reset Link</button>
+                      <button
+                        type="button"
+                        onClick={() => { setError(""); switchTab("login"); }}
+                        className="w-full text-center text-[11px] text-mid/60 hover:text-ink transition-colors"
+                      >
+                        ← Back to sign in
+                      </button>
+                    </form>
+                  )
+                ) : tab === "login" ? (
                   <form onSubmit={handleLogin} className="space-y-4">
                     <div className="space-y-1">
                       <label className="text-[10px] tracking-[0.25em] uppercase text-mid">Email</label>
@@ -422,7 +480,7 @@ export default function AccountPage() {
                       <p className="text-[10px] text-mid/50 tracking-wide">
                         Hint: <span className="font-mono select-all">sophea / rawe2025</span>
                       </p>
-                      <button type="button" className="text-[11px] text-mid/60 hover:text-ink transition-colors">Forgot?</button>
+                      <button type="button" onClick={() => { setError(""); setForgotSent(false); setForgotEmail(""); switchTab("forgot"); }} className="text-[11px] text-mid/60 hover:text-ink transition-colors">Forgot password?</button>
                     </div>
                     <button type="submit" className="liquid-glass-btn w-full justify-center mt-2 text-sm py-3">Sign In</button>
                     <p className="text-center text-[11px] text-mid/60 pt-1">

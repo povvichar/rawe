@@ -27,14 +27,25 @@ const details = [
   { label: "Net weight", value: "4.5g / 0.16 oz" },
 ];
 
+const GALLERY_LIFESTYLE = [
+  "/assets/social-media/img1.png",
+  "/assets/social-media/img2.png",
+  "/assets/social-media/img5.png",
+];
+
+const THUMB_VISIBLE = 4;
+
 export default function ProductDetail({ initialShade }: { initialShade: Shade }) {
   const [selected, setSelected] = useState(initialShade);
-  const [hovered, setHovered] = useState<Shade | null>(null);
   const [added, setAdded] = useState(false);
   const [openDetail, setOpenDetail] = useState<string | null>(null);
-  const [thumbOffset, setThumbOffset] = useState(0);
-  const THUMB_VISIBLE = 4;
-  const displayed = hovered ?? selected;
+  const [activePhoto, setActivePhoto] = useState(0);
+  const [hoveredPhoto, setHoveredPhoto] = useState<number | null>(null);
+  const [galleryOffset, setGalleryOffset] = useState(0);
+  const displayedPhoto = hoveredPhoto ?? activePhoto;
+
+  const gallery = [selected.image, selected.hoverImage, ...GALLERY_LIFESTYLE];
+
   const { add } = useCart();
   const { show } = useToast();
 
@@ -60,35 +71,35 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
           </nav>
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 pt-8 pb-24 flex flex-col lg:flex-row gap-10 lg:gap-20">
+        <div className="max-w-6xl mx-auto px-6 pt-10 pb-24 flex flex-col lg:flex-row gap-10 lg:gap-20">
 
-          {/* ── Left: Image ── */}
+          {/* ── Left: Photo gallery ── */}
           <div className="w-full lg:w-[52%] lg:sticky lg:top-24 self-start">
-            <div className="relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden" style={{ background: "#F2F2F2" }}>
+            <div className="relative w-full aspect-[4/5] rounded-none overflow-hidden" style={{ background: "#F2F2F2" }}>
 
-              {/* Main image */}
+              {/* Active photo */}
               <Image
-                key={displayed.id}
-                src={displayed.image}
-                alt={displayed.name}
+                key={displayedPhoto + selected.id}
+                src={gallery[displayedPhoto]}
+                alt={selected.name}
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 52vw"
                 className="object-cover transition-opacity duration-300"
               />
 
-              {/* Thumbnail strip — overlaid on left */}
+              {/* Gallery thumbnails — overlaid on left */}
               <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2">
                 {/* Up arrow */}
                 <button
-                  onClick={() => setThumbOffset((o) => Math.max(0, o - 1))}
-                  disabled={thumbOffset === 0}
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-0"
+                  onClick={() => setGalleryOffset((o) => Math.max(0, o - 1))}
+                  disabled={galleryOffset === 0}
+                  className="w-8 h-8 rounded-none flex items-center justify-center transition-all duration-200 disabled:opacity-0"
                   style={{
                     background: "rgba(255,255,255,0.70)",
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.85)",
+              
                   }}
                 >
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -96,37 +107,39 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
                   </svg>
                 </button>
 
-                {/* Visible thumbnails */}
-                {shades.slice(thumbOffset, thumbOffset + THUMB_VISIBLE).map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => setSelected(s)}
-                    onMouseEnter={() => setHovered(s)}
-                    onMouseLeave={() => setHovered(null)}
-                    className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 transition-all duration-300"
-                    style={{
-                      background: "#F2F2F2",
-                      boxShadow: selected.id === s.id
-                        ? `0 0 0 2px #fff, 0 0 0 3px ${s.hex}`
-                        : "0 0 0 1.5px rgba(255,255,255,0.6)",
-                      opacity: selected.id === s.id || hovered?.id === s.id ? 1 : 0.6,
-                      transform: selected.id === s.id || hovered?.id === s.id ? "scale(1.08)" : "scale(1)",
-                    }}
-                  >
-                    <Image src={s.image} alt={s.name} fill sizes="56px" className="object-cover" />
-                  </button>
-                ))}
+                {gallery.slice(galleryOffset, galleryOffset + THUMB_VISIBLE).map((src, i) => {
+                  const idx = galleryOffset + i;
+                  return (
+                    <button
+                      key={idx}
+                      onClick={() => setActivePhoto(idx)}
+                      onMouseEnter={() => setHoveredPhoto(idx)}
+                      onMouseLeave={() => setHoveredPhoto(null)}
+                      className="relative w-14 h-14 rounded-none overflow-hidden flex-shrink-0 transition-all duration-300"
+                      style={{
+                        background: "#F2F2F2",
+                        boxShadow: activePhoto === idx
+                          ? `0 0 0 2px #fff, 0 0 0 3px ${selected.hex}`
+                          : "0 0 0 1.5px rgba(255,255,255,0.6)",
+                        opacity: activePhoto === idx || hoveredPhoto === idx ? 1 : 0.6,
+                        transform: activePhoto === idx || hoveredPhoto === idx ? "scale(1.08)" : "scale(1)",
+                      }}
+                    >
+                      <Image src={src} alt={`Photo ${idx + 1}`} fill sizes="56px" className="object-cover" />
+                    </button>
+                  );
+                })}
 
                 {/* Down arrow */}
                 <button
-                  onClick={() => setThumbOffset((o) => Math.min(shades.length - THUMB_VISIBLE, o + 1))}
-                  disabled={thumbOffset >= shades.length - THUMB_VISIBLE}
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200 disabled:opacity-0"
+                  onClick={() => setGalleryOffset((o) => Math.min(gallery.length - THUMB_VISIBLE, o + 1))}
+                  disabled={galleryOffset >= gallery.length - THUMB_VISIBLE}
+                  className="w-8 h-8 rounded-none flex items-center justify-center transition-all duration-200 disabled:opacity-0"
                   style={{
                     background: "rgba(255,255,255,0.70)",
                     backdropFilter: "blur(12px)",
                     WebkitBackdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.85)",
+                    
                   }}
                 >
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -137,7 +150,7 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
 
               {/* Shade label */}
               <div
-                className="absolute top-5 right-5 flex items-center gap-2 px-3 py-1.5 rounded-full"
+                className="absolute top-5 right-5 flex items-center gap-2 px-3 py-1.5 rounded-none"
                 style={{
                   background: "rgba(255,255,255,0.60)",
                   backdropFilter: "blur(16px)",
@@ -145,13 +158,13 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
                   border: "1px solid rgba(255,255,255,0.80)",
                 }}
               >
-                <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: displayed.hex }} />
-                <span className="text-[9px] tracking-[0.28em] uppercase text-ink font-medium">{displayed.label}</span>
+                <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: selected.hex }} />
+                <span className="text-[9px] tracking-[0.28em] uppercase text-ink font-medium">{selected.label}</span>
               </div>
 
-              {/* Shade number */}
+              {/* Photo counter */}
               <div
-                className="absolute bottom-5 right-5 text-[10px] tracking-[0.2em] uppercase px-2.5 py-1 rounded-full"
+                className="absolute bottom-5 right-5 text-[10px] tracking-[0.2em] uppercase px-2.5 py-1 rounded-none"
                 style={{
                   background: "rgba(255,255,255,0.55)",
                   backdropFilter: "blur(12px)",
@@ -160,7 +173,7 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
                   color: "#1a1a1a",
                 }}
               >
-                #{selected.id}
+                {displayedPhoto + 1} / {gallery.length}
               </div>
             </div>
           </div>
@@ -178,7 +191,7 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
               </h1>
               <div className="flex items-center gap-4">
                 <span className="text-2xl text-ink font-light">${selected.priceUSD}.00</span>
-                <span className="text-[9px] tracking-[0.25em] uppercase text-mid border border-mid/30 rounded-full px-3 py-1">
+                <span className="text-[9px] tracking-[0.25em] uppercase text-mid border border-mid/30 rounded-none px-3 py-1">
                   In Stock
                 </span>
               </div>
@@ -225,24 +238,24 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
                     key={s.id}
                     onClick={() => setSelected(s)}
                     title={s.name}
-                    className="group relative w-10 h-10 rounded-full transition-all duration-200 hover:scale-110"
+                    className="group relative w-11 h-11 rounded-none overflow-hidden transition-all duration-200 hover:scale-110 flex-shrink-0"
                     style={{
-                      background: s.hex,
                       boxShadow: selected.id === s.id
                         ? `0 0 0 2px #fff, 0 0 0 3.5px ${s.hex}`
-                        : "0 0 0 1px rgba(0,0,0,0.10)",
+                        : "none",
                     }}
                   >
+                    <Image src={s.swatch} alt={s.name} fill sizes="44px" className="object-cover" />
                     {selected.id === s.id && (
-                      <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="absolute inset-0 flex items-center justify-center bg-black/10">
                         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                          <path d="M2 5.2l2 2 4-4" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M2 5.2l2 2 4-4" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </span>
                     )}
                     {/* Tooltip */}
                     <span
-                      className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-2 py-0.5 text-[9px] tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                      className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-none px-2 py-0.5 text-[9px] tracking-wide text-white opacity-0 group-hover:opacity-100 transition-opacity duration-150"
                       style={{ background: "#1a1a1a" }}
                     >
                       {s.name}
@@ -272,7 +285,7 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
               ].map(({ icon, label, sub }) => (
                 <div
                   key={label}
-                  className="flex flex-col items-center text-center gap-1 py-3 px-2 rounded-2xl"
+                  className="flex flex-col items-center text-center gap-1 py-3 px-2 rounded-none"
                   style={{
                     background: "rgba(255,255,255,0.45)",
                     backdropFilter: "blur(12px)",

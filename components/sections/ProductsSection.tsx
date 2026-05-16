@@ -13,7 +13,7 @@ function ShadeCard({ shade }: { shade: Shade }) {
   const { show } = useToast();
   return (
     <Link href={`/products/${shade.id}`}>
-      <article className="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#f9f9f9]">
+      <article className="group relative aspect-[3/4] rounded-none overflow-hidden cursor-pointer bg-[#f9f9f9]">
         {/* Default image */}
         <Image
           src={shade.image}
@@ -45,7 +45,7 @@ function ShadeCard({ shade }: { shade: Shade }) {
               add({ shadeId: shade.id, name: shade.name, hex: shade.hex, priceUSD: shade.priceUSD });
               show(shade.name, shade.hex);
             }}
-            className="rounded-full  bg-white/80 backdrop-blur-sm text-ink text-xs tracking-[0.15em] uppercase px-6 py-2.5 hover:bg-ink hover:text-white transition-colors duration-200"
+            className="rounded-none bg-white/80 backdrop-blur-sm text-ink text-xs tracking-[0.15em] uppercase px-6 py-2.5 hover:bg-ink hover:text-white transition-colors duration-200"
           >
             Add to Cart · ${shade.priceUSD}
           </button>
@@ -94,16 +94,18 @@ export default function ProductsSection() {
       });
       gsap.fromTo(
         ".shade-card",
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 64, scale: 0.92 },
         {
           opacity: 1,
           y: 0,
-          stagger: 0.1,
-          duration: 0.6,
-          ease: "power2.out",
+          scale: 1,
+          stagger: 0.15,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: 0.2,
           scrollTrigger: {
             trigger: ref.current,
-            start: "top 100%",
+            start: "top 105%",
             once: true,
           },
         }
@@ -123,16 +125,16 @@ export default function ProductsSection() {
       {/* Title */}
       <div className="text-center px-5 sm:px-8 md:px-12 mb-12 sm:mb-18">
         <p className="text-[10px] sm:text-[11px] tracking-[0.3em] uppercase text-mid mb-2 sm:mb-3">
-          {["The", "Collection"].map((word, i, arr) => (
-            <span key={i} className="section-word inline-block">
-              {word}{i < arr.length - 1 ? " " : ""}
+          {["The", "Collection"].map((word, i) => (
+            <span key={i} className="section-word inline-block mr-[0.22em]">
+              {word}
             </span>
           ))}
         </p>
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-light text-ink">
-          {["Our", "Products"].map((word, i, arr) => (
-            <span key={i} className="section-word inline-block">
-              {word}{i < arr.length - 1 ? " " : ""}
+          {["Our", "Products"].map((word, i) => (
+            <span key={i} className="section-word inline-block mr-[0.22em]">
+              {word}
             </span>
           ))}
         </h2>
@@ -151,14 +153,14 @@ export default function ProductsSection() {
           }}
         >
           {visible.map((s, i) => (
-            <div key={s.id} className="shade-card relative">
+            <div key={s.id} className="shade-card relative" style={{ opacity: 0 }}>
               <ShadeCard shade={s} />
               {/* Next arrow floats centered on the last card */}
               {i === visible.length - 1 && page < totalPages - 1 && (
                 <button
                   onClick={() => { triggerPulse(); goTo(1); }}
                   aria-label="Next products"
-                  className={`absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
+                  className={`absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-none flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     border: "1px solid rgba(255,255,255,0.6)",
@@ -177,7 +179,7 @@ export default function ProductsSection() {
                 <button
                   onClick={() => { triggerPulse(); goTo(-1); }}
                   aria-label="Previous products"
-                  className={`absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
+                  className={`absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-none flex items-center justify-center z-10 transition-transform duration-300 hover:scale-110 ${pulsing ? "pulse-ring" : ""}`}
                   style={{
                     background: "rgba(255,255,255,0.35)",
                     border: "1px solid rgba(255,255,255,0.6)",
@@ -203,7 +205,7 @@ export default function ProductsSection() {
               onClick={() => setPage(i)}
               aria-label={`Page ${i + 1}`}
               className={`rounded-full transition-all duration-300 ${
-                i === page ? "w-5 h-1.5 bg-ink" : "w-1.5 h-1.5 bg-ink/25"
+                i === page ? "w-5 h-1.5 bg-ink rounded-none" : "w-1.5 h-1.5 bg-ink/25 rounded-none"
               }`}
             />
           ))}

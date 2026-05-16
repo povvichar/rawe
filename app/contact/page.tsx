@@ -8,7 +8,7 @@ import { gsap } from "@/lib/gsap-init";
 import { site } from "@/data/site";
 
 const glassInput =
-  "w-full rounded-2xl px-5 py-3.5 text-sm text-ink placeholder:text-mid/50 outline-none transition-all duration-200 focus:ring-2 focus:ring-black/10 bg-white/40 border border-white/60 backdrop-blur-sm";
+  "w-full rounded-none px-5 py-3.5 text-sm text-ink placeholder:text-mid/50 outline-none transition-all duration-200 focus:ring-2 focus:ring-black/10 bg-white/40 border border-white/60 backdrop-blur-sm";
 
 const channels = [
   {
@@ -117,13 +117,12 @@ export default function ContactPage() {
                 href={href}
                 target={href.startsWith("http") ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                className="channel-card group rounded-2xl p-5 flex flex-col gap-3 opacity-0"
+                className="channel-card group rounded-none p-5 flex flex-col gap-3 opacity-0"
                 style={{
                   background: "rgba(255,255,255,0.32)",
                   backdropFilter: "blur(24px) saturate(180%)",
                   WebkitBackdropFilter: "blur(24px) saturate(180%)",
                   border: "1px solid rgba(255,255,255,0.55)",
-                  boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.75)",
                   transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease",
                 }}
               >
@@ -175,13 +174,13 @@ export default function ContactPage() {
             {/* Right — form */}
             <div className="reveal-slow">
               <div
-                className="rounded-3xl p-7 sm:p-9"
+                className="rounded-1xl p-7 sm:p-9"
                 style={{
                   background: "rgba(255,255,255,0.38)",
                   backdropFilter: "blur(48px) saturate(180%)",
                   WebkitBackdropFilter: "blur(48px) saturate(180%)",
                   border: "1px solid rgba(255,255,255,0.55)",
-                  boxShadow: "inset 0 1.5px 0 rgba(255,255,255,0.85)",
+                
                 }}
               >
                 {status === "sent" ? (

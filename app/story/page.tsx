@@ -97,7 +97,7 @@ export default function StoryPage() {
               {["/assets/social-media/img1.png","/assets/social-media/img2.png","/assets/social-media/img3.png"].map((src, i) => (
                 <div
                   key={i}
-                  className={`relative overflow-hidden rounded-2xl ${i === 0 ? "col-span-2 aspect-[16/9]" : "aspect-square"}`}
+                  className={`relative overflow-hidden rounded-none ${i === 0 ? "col-span-2 aspect-[16/9]" : "aspect-square"}`}
                   style={{ border: "1px solid rgba(255,255,255,0.55)" }}
                 >
                   <Image src={src} alt="" fill className="object-cover" sizes="400px" />
@@ -155,7 +155,7 @@ export default function StoryPage() {
               {["/assets/social-media/img5.png","/assets/social-media/img6.png","/assets/social-media/img4.png"].map((src, i) => (
                 <div
                   key={i}
-                  className={`relative overflow-hidden rounded-2xl ${i === 2 ? "col-span-2 aspect-[16/9]" : "aspect-square"}`}
+                  className={`relative overflow-hidden rounded-none ${i === 2 ? "col-span-2 aspect-[16/9]" : "aspect-square"}`}
                   style={{ border: "1px solid rgba(255,255,255,0.55)" }}
                 >
                   <Image src={src} alt="" fill className="object-cover" sizes="400px" />
@@ -191,7 +191,7 @@ export default function StoryPage() {
               ].map(({ tag, headline, body }) => (
                 <div
                   key={tag}
-                  className="rounded-2xl p-8 flex flex-col gap-4"
+                  className="rounded-none p-8 flex flex-col gap-4"
                   style={{
                     background: "rgba(255,255,255,0.28)",
                     backdropFilter: "blur(24px) saturate(180%)",

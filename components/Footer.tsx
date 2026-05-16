@@ -17,7 +17,7 @@ const legal = [
 
 export default function Footer() {
   return (
-    <footer style={{ backgroundColor: "#F5F5F5" }} className="text-ink">
+    <footer style={{ backgroundColor: "#E6E6E6" }} className="text-ink">
       <div className="mx-auto max-w-7xl px-8 md:px-14 py-14 md:py-16">
         <div className="flex flex-col md:flex-row md:justify-between gap-10 md:gap-8">
 

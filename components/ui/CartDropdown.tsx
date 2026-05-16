@@ -35,7 +35,7 @@ export default function CartDropdown({ onClose }: Props) {
   return (
     <div
       ref={ref}
-      className="cart-dropdown-pop absolute right-0 mt-3 w-[340px] rounded-3xl overflow-hidden z-50"
+      className="cart-dropdown-pop absolute right-0 mt-3 w-[340px] rounded-2xl overflow-hidden z-50"
       style={{
         background: "rgba(255,255,255,0.75)",
         backdropFilter: "blur(80px) saturate(220%) brightness(1.08)",
@@ -53,7 +53,7 @@ export default function CartDropdown({ onClose }: Props) {
         <span className="font-display text-ink text-base tracking-wide">My Bag</span>
         {items.length > 0 && (
           <span
-            className="text-xs text-mid px-2 py-0.5 rounded-full"
+            className="text-xs text-mid px-2 py-0.5 rounded-none"
             style={{ background: "rgba(255,255,255,0.40)" }}
           >
             {items.reduce((s, i) => s + i.qty, 0)} {items.reduce((s, i) => s + i.qty, 0) === 1 ? "item" : "items"}
@@ -84,7 +84,7 @@ export default function CartDropdown({ onClose }: Props) {
               >
                 {/* Thumbnail */}
                 <div
-                  className="relative flex-shrink-0 w-14 h-14 rounded-xl overflow-hidden"
+                  className="relative flex-shrink-0 w-14 h-14 rounded-none overflow-hidden"
                   style={{
                     background: item.hex ?? "rgba(255,255,255,0.35)",
                     border: "1px solid rgba(255,255,255,0.55)",
@@ -104,7 +104,7 @@ export default function CartDropdown({ onClose }: Props) {
                   <div className="flex items-center gap-2 mt-1.5">
                     <button
                       onClick={() => changeQty(item.shadeId, -1)}
-                      className="w-5 h-5 rounded-full text-ink text-xs flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                      className="w-5 h-5 rounded-none text-ink text-xs flex items-center justify-center transition-all hover:scale-110 active:scale-95"
                       style={{
                         background: "rgba(255,255,255,0.50)",
                         border: "1px solid rgba(255,255,255,0.60)",
@@ -115,7 +115,7 @@ export default function CartDropdown({ onClose }: Props) {
                     <span className="text-ink text-xs w-4 text-center">{item.qty}</span>
                     <button
                       onClick={() => changeQty(item.shadeId, 1)}
-                      className="w-5 h-5 rounded-full text-ink text-xs flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+                      className="w-5 h-5 rounded-none text-ink text-xs flex items-center justify-center transition-all hover:scale-110 active:scale-95"
                       style={{
                         background: "rgba(255,255,255,0.50)",
                         border: "1px solid rgba(255,255,255,0.60)",
