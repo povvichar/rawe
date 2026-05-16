@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useRef, useEffect, useState } from "react";
 import { nav, site } from "@/data/site";
 
 const socials = [
@@ -16,8 +19,28 @@ const legal = [
 ];
 
 export default function Footer() {
+  const ref = useRef<HTMLElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); observer.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <footer style={{ backgroundColor: "#E6E6E6" }} className="text-ink">
+    <footer
+      ref={ref}
+      style={{ backgroundColor: "#E6E6E6" }}
+      className={`text-ink transition-all duration-1000 ease-out ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+      }`}
+    >
       <div className="mx-auto max-w-7xl px-8 md:px-14 py-14 md:py-16">
         <div className="flex flex-col md:flex-row md:justify-between gap-10 md:gap-8">
 

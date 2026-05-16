@@ -34,7 +34,7 @@ function ShadeCard({ shade }: { shade: Shade }) {
         {/* Title + price overlay — visible by default, hidden on hover */}
         <div className="absolute inset-x-0 bottom-[2px] px-4 pb-4 flex flex-col gap-0 items-center text-center transition-all duration-300 group-hover:opacity-0 group-hover:translate-y-2">
           <p className="font-display text-base uppercase font-medium text-ink tracking-[0.15em]">{shade.name}</p>
-          <p className="text-lg font-base text-ink/70">${shade.priceUSD}.00</p>
+          <p className="text-base font-base text-ink/70">${shade.priceUSD}.00</p>
         </div>
 
         {/* Add to Cart button — hidden by default, shown on hover */}
@@ -166,7 +166,7 @@ export default function ProductsSection() {
                     border: "1px solid rgba(255,255,255,0.6)",
                     backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
                     WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.75)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 0px 0 rgba(255,255,255,0.75)",
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
