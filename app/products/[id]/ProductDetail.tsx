@@ -75,7 +75,14 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
 
           {/* ── Left: Photo gallery ── */}
           <div className="w-full lg:w-[52%] lg:sticky lg:top-24 self-start">
-            <div className="relative w-full aspect-[4/5] rounded-none overflow-hidden" style={{ background: "#F2F2F2" }}>
+            <div
+              className="relative w-full aspect-[4/5] rounded-none overflow-hidden"
+              style={{
+                background: displayedPhoto === 0
+                  ? "radial-gradient(circle at 50% 38%, #ffffff 0%, #f0eeec 55%, #e6e3df 100%)"
+                  : "#F2F2F2",
+              }}
+            >
 
               {/* Active photo */}
               <Image
@@ -85,7 +92,11 @@ export default function ProductDetail({ initialShade }: { initialShade: Shade })
                 fill
                 priority
                 sizes="(max-width: 1024px) 90vw, 52vw"
-                className="object-cover transition-opacity duration-300"
+                className={`transition-opacity duration-300 ${
+                  displayedPhoto === 0
+                    ? "object-contain scale-[0.62]"
+                    : "object-cover"
+                }`}
               />
 
               {/* Gallery thumbnails — overlaid on left */}

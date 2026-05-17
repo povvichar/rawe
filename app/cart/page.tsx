@@ -27,7 +27,7 @@ export default function CartPage() {
     firstName: "", lastName: "", email: "", phone: "",
     address: "", city: "", province: "", zip: "",
   });
-  const [payMethod, setPayMethod] = useState<"khqr" | "aba">("khqr");
+  const [payMethod, setPayMethod] = useState<"khqr" | "cod">("cod");
 
   const subtotal = items.reduce((s, i) => s + i.priceUSD * i.qty, 0);
   const total    = subtotal + (items.length > 0 ? SHIPPING : 0);
@@ -213,25 +213,26 @@ export default function CartPage() {
 
                   {/* Method tabs */}
                   <div className="flex gap-3 px-6 pt-5">
-                    {(["khqr", "aba"] as const).map((m) => (
-                      <button
-                        key={m}
-                        onClick={() => setPayMethod(m)}
-                        className={`flex-1 py-3 rounded-none flex items-center justify-center gap-2 transition-all duration-200 ${payMethod === m ? "bg-ink" : "hover:bg-white/60"}`}
-                        style={payMethod !== m ? { background: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.60)" } : {}}
-                      >
-                        <Image
-                          src={m === "khqr" ? "/assets/KHQR.png" : "/assets/ABA.png"}
-                          alt=""
-                          width={m === "khqr" ? 48 : 44}
-                          height={20}
-                          className="object-contain"
-                        />
-                        <span className={`text-xs tracking-[0.15em] uppercase font-medium ${payMethod === m ? "text-white" : "text-mid"}`}>
-                          {m === "khqr" ? "KHQR" : "ABA Pay"}
-                        </span>
-                      </button>
-                    ))}
+                    {(["cod", "khqr"] as const).map((m) => {
+                      const active = payMethod === m;
+                      return (
+                        <button
+                          key={m}
+                          onClick={() => setPayMethod(m)}
+                          className={`flex-1 py-3.5 rounded-none flex items-center justify-center gap-2.5 transition-all duration-200 ${active ? "bg-ink" : "hover:bg-white/60"}`}
+                          style={!active ? { background: "rgba(255,255,255,0.40)", border: "1px solid rgba(255,255,255,0.60)" } : {}}
+                        >
+                          {m === "khqr" ? (
+                            <Image src="/assets/KHQR.png" alt="" width={46} height={20} className={`object-contain ${active ? "brightness-0 invert" : ""}`} />
+                          ) : (
+                            <Image src="/assets/delivery.svg" alt="" width={18} height={18} className={`object-contain ${active ? "brightness-0 invert" : ""}`} />
+                          )}
+                          <span className={`text-xs tracking-[0.14em] uppercase font-medium ${active ? "text-white" : "text-mid"}`}>
+                            {m === "khqr" ? "KHQR" : "Cash on Delivery"}
+                          </span>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   <div className="px-6 py-6">
@@ -285,18 +286,27 @@ export default function CartPage() {
                       </div>
                     )}
 
-                    {/* ABA Pay */}
-                    {payMethod === "aba" && (
-                      <div className="space-y-4">
-                        <p className="text-xs text-mid leading-relaxed">
-                          Transfer to the ABA account below, then tap <span className="text-ink font-medium">Confirm Payment</span>.
-                        </p>
+                    {/* Cash on Delivery */}
+                    {payMethod === "cod" && (
+                      <div className="space-y-5">
+                        <div className="flex flex-col items-center text-center gap-3 py-2">
+                          <div
+                            className="w-14 h-14 rounded-none flex items-center justify-center"
+                            style={{ background: "rgba(255,255,255,0.60)", border: "1px solid rgba(255,255,255,0.80)" }}
+                          >
+                            <Image src="/assets/delivery.svg" alt="" width={26} height={26} className="object-contain" />
+                          </div>
+                          <p className="font-display text-ink text-base tracking-wide">Pay when it arrives</p>
+                          <p className="text-sm text-mid leading-relaxed max-w-xs">
+                            Our courier will collect <span className="text-ink font-medium">${total.toFixed(2)}</span> in
+                            cash when your order is delivered. Please have the exact amount ready.
+                          </p>
+                        </div>
+
                         {[
-                          { label: "Bank", value: "ABA Bank" },
-                          { label: "Account Name", value: "RAWE Official" },
-                          { label: "Account Number", value: "000 123 456" },
-                          { label: "Amount", value: `$${total.toFixed(2)}` },
-                          { label: "Reference", value: `RAWE-${Date.now().toString().slice(-6)}` },
+                          { label: "Pay to", value: "RAWE Courier" },
+                          { label: "Amount Due", value: `$${total.toFixed(2)}` },
+                          { label: "Delivery", value: "1–3 business days" },
                         ].map(({ label, value }) => (
                           <div
                             key={label}
@@ -307,12 +317,13 @@ export default function CartPage() {
                             <span className="text-sm text-ink font-medium font-sans">{value}</span>
                           </div>
                         ))}
+
                         <div
                           className="rounded-none px-4 py-3 flex items-start gap-3"
                           style={{ background: "rgba(234,148,173,0.12)", border: "1px solid rgba(234,148,173,0.30)" }}
                         >
                           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="mt-0.5 flex-shrink-0"><circle cx="7" cy="7" r="6" stroke="#ea94ad" strokeWidth="1.2"/><path d="M7 4v3.5M7 9.5v.5" stroke="#ea94ad" strokeWidth="1.3" strokeLinecap="round"/></svg>
-                          <p className="text-[11px] text-mid leading-relaxed">Use the exact reference number so we can match your payment.</p>
+                          <p className="text-[11px] text-mid leading-relaxed">A team member may call to confirm your order before dispatch.</p>
                         </div>
                       </div>
                     )}
@@ -320,7 +331,7 @@ export default function CartPage() {
 
                   <div className="px-6 pb-6">
                     <button className="liquid-glass-btn w-full justify-center py-3.5 text-sm">
-                      Confirm Payment · ${total.toFixed(2)}
+                      {payMethod === "cod" ? "Place Order" : "Confirm Payment"} · ${total.toFixed(2)}
                     </button>
                   </div>
                 </div>
