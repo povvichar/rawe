@@ -9,7 +9,7 @@
   --font-display: 'The Seasons', serif;
   --font-sans: 'Elms Sans', system-ui, sans-serif;
   --hero-bg: #F2F2F2;
-  --products-bg: #ededed;
+  --products-bg: #F2F2F2;
   --accent: #ea94ad;
   --text-dark: #1a1a1a;
   --text-mid: #6b6b6b;
@@ -83,6 +83,16 @@ body {
 .liquid-glass-btn:focus-visible {
   outline: 2px solid rgba(0, 0, 0, 0.25);
   outline-offset: 3px;
+}
+
+/* Hero CTA: drop backdrop-filter — the product image scales/moves behind
+   this button while the hero is pinned, and re-blurring the moving backdrop
+   every scroll frame is what stalls scroll-back into the hero. A static
+   translucent fill keeps the frosted look on the light hero background. */
+.hero-cta:not(:hover) {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 @keyframes cart-dropdown-in {

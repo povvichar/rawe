@@ -20,7 +20,7 @@ function ShadeCard({ shade }: { shade: Shade }) {
           alt={shade.name}
           fill
           sizes="(max-width: 768px) 50vw, 25vw"
-          className="object-cover scale-90 transition-all duration-500 ease-out group-hover:scale-95"
+          className="object-contain scale-[0.68] transition-all duration-500 ease-out group-hover:scale-[0.74]"
         />
         {/* Hover image — crossfades in */}
         <Image
@@ -58,6 +58,7 @@ function ShadeCard({ shade }: { shade: Shade }) {
 export default function ProductsSection() {
   const ref = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const firstRender = useRef(true);
   const [page, setPage] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [pulsing, setPulsing] = useState(false);
@@ -114,13 +115,29 @@ export default function ProductsSection() {
     { scope: ref }
   );
 
+  // Re-fade cards in on pagination (skip first render — scroll entrance handles that)
+  useGSAP(
+    () => {
+      if (firstRender.current) {
+        firstRender.current = false;
+        return;
+      }
+      gsap.fromTo(
+        ".shade-card",
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.08 }
+      );
+    },
+    { scope: ref, dependencies: [page] }
+  );
+
   const visible = shades.slice(page * perPage, page * perPage + perPage);
 
   return (
     <section
       ref={ref}
       id="products"
-      className="relative bg-products pt-2 pb-24 md:pt-2 md:pb-16"
+      className="relative z-[3] bg-transparent pt-2 pb-24 md:pt-2 md:pb-16"
     >
       {/* Title */}
       <div className="text-center px-5 sm:px-8 md:px-12 mb-12 sm:mb-18">
@@ -153,7 +170,7 @@ export default function ProductsSection() {
           }}
         >
           {visible.map((s, i) => (
-            <div key={s.id} className="shade-card relative" style={{ opacity: 0 }}>
+            <div key={s.id} className="shade-card relative">
               <ShadeCard shade={s} />
               {/* Next arrow floats centered on the last card */}
               {i === visible.length - 1 && page < totalPages - 1 && (
@@ -185,7 +202,7 @@ export default function ProductsSection() {
                     border: "1px solid rgba(255,255,255,0.6)",
                     backdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
                     WebkitBackdropFilter: "blur(24px) saturate(200%) brightness(1.05)",
-                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 1.5px 0 rgba(255,255,255,0.75)",
+                    boxShadow: "0 4px 24px rgba(0,0,0,0.08), inset 0 0px 0 rgba(255,255,255,0.75)",
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
