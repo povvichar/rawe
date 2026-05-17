@@ -3,20 +3,40 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRef, useEffect, useState } from "react";
-import { nav, site } from "@/data/site";
+import { site } from "@/data/site";
 
-const socials = [
-  { label: "Tiktok",    href: site.social.tiktok,    icon: "/assets/tiktok.svg" },
-  { label: "Instagram", href: site.social.instagram,  icon: "/assets/ig.svg" },
-  { label: "Facebook",  href: site.social.facebook,   icon: "/assets/fb.svg" },
+const footerNav = [
+  { label: "Shop",       href: "/#products" },
+  { label: "Our Story",  href: "/story" },
+  { label: "Contact us", href: "/contact" },
 ];
 
 const legal = [
-  { label: "Returns & Refunds", href: "/returns" },
-  { label: "FAQs",              href: "/faqs" },
-  { label: "Privacy Policy",    href: "/privacy" },
-  { label: "Terms & Conditions",href: "/terms" },
+  { label: "Returns & Refunds",  href: "/returns" },
+  { label: "FAQs",               href: "/faqs" },
+  { label: "Privacy Policy",     href: "/privacy" },
+  { label: "Terms & Conditions", href: "/terms" },
 ];
+
+const socials = [
+  { label: "TikTok",    href: site.social.tiktok,    icon: "/assets/tiktok.svg" },
+  { label: "Instagram", href: site.social.instagram, icon: "/assets/ig.svg" },
+  { label: "Facebook",  href: site.social.facebook,  icon: "/assets/fb.svg" },
+];
+
+function LinkItem({ href, label }: { href: string; label: string }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="relative group inline-block font-display font-light text-normal text-ink hover:text-ink/55 transition-colors duration-300"
+      >
+        {label}
+        <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
+      </Link>
+    </li>
+  );
+}
 
 export default function Footer() {
   const ref = useRef<HTMLElement>(null);
@@ -36,76 +56,65 @@ export default function Footer() {
   return (
     <footer
       ref={ref}
-      style={{ backgroundColor: "#E6E6E6" }}
+      style={{ backgroundColor: "#FFFFFF" }}
       className={`text-ink transition-all duration-1000 ease-out ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-8 md:px-14 py-14 md:py-16">
-        <div className="flex flex-col md:flex-row md:justify-between gap-10 md:gap-8">
+      <div className="mx-auto max-w-7xl px-8 md:px-16 pt-10 md:pt-12 pb-6">
+        <div className="flex flex-col lg:flex-row lg:justify-between gap-14 lg:gap-8">
 
-          {/* Logo */}
-          <div className="flex flex-col items-start">
-            <Image src="/assets/vertical-logo.svg" alt="RAWE" width={108} height={108} style={{ opacity: 0.7 }} />
-          </div>
+          {/* Brand */}
+          <div className="max-w-md">
+            <Image
+              src="/assets/Logo.svg"
+              alt="RAWE"
+              width={170}
+              height={56}
+              className="h-12 md:h-14 w-auto"
+            />
+            <p className="mt-7 text-sm md:text-[14px] leading-relaxed text-ink/45">
+              <span className="block text-ink/70">Natural Glow, Made for Your Skin.</span>
+              A creamy blush that blends effortlessly and flatters every
+              Cambodian skin tone.
+            </p>
 
-          {/* Right columns */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-16">
-
-          {/* Nav links */}
-          <div>
-            <ul className="space-y-4 text-base font-display font-light text-ink">
-              {nav.links.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="relative group inline-block hover:text-ink/60 transition-colors duration-300">
-                    {l.label}
-                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social links */}
-          <div>
-            <ul className="space-y-4 text-base font-display font-light text-ink">
+            {/* Socials */}
+            <div className="mt-8 flex items-center gap-6">
               {socials.map((s) => (
-                <li key={s.label}>
-                  <a
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative group inline-flex items-center gap-2.5 hover:text-ink/60 transition-colors duration-300"
-                  >
-                    <Image src={s.icon} alt={s.label} width={16} height={16} className="opacity-80" />
-                    {s.label}
-                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
-                  </a>
-                </li>
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="opacity-70 hover:opacity-100 transition-opacity duration-300"
+                >
+                  <Image src={s.icon} alt={s.label} width={18} height={18} />
+                </a>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Legal links */}
-          <div>
-            <ul className="space-y-4 text-base font-display font-light text-ink">
+          {/* Link columns */}
+          <div className="grid grid-cols-2 gap-12 sm:gap-20 lg:gap-28 lg:pr-4">
+            <ul className="space-y-5">
+              {footerNav.map((l) => (
+                <LinkItem key={l.href} {...l} />
+              ))}
+            </ul>
+            <ul className="space-y-5">
               {legal.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="relative group inline-block hover:text-ink/60 transition-colors duration-300">
-                    {l.label}
-                    <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-ink transition-all duration-300 ease-out group-hover:w-full" />
-                  </Link>
-                </li>
+                <LinkItem key={l.href} {...l} />
               ))}
             </ul>
           </div>
 
-          </div>{/* end right columns */}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-ink/10 flex justify-center">
-          <p className="text-sm text-ink/50">
+        <div className="mt-10 pt-6 border-t border-ink/10 flex justify-center">
+          <p className="text-sm md:text-[13px] text-ink/40">
             © {new Date().getFullYear()} RAWE. All rights reserved.
           </p>
         </div>

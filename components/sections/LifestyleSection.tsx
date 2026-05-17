@@ -57,7 +57,7 @@ export default function LifestyleSection() {
           src={coverProduct}
           alt="RAWE blush sticks lineup"
           width={3840}
-          height={1779}
+          height={983}
           className="w-full h-auto block"
           style={{ mixBlendMode: "multiply" }}
           priority
