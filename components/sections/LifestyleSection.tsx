@@ -3,7 +3,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
-import coverProduct from "@/assets/cover-prodcut.webp";
 
 // ── Vertical position of the headline behind the products ──
 // Smaller % = higher up · Larger % = further down (it's % of the image height)
@@ -54,7 +53,7 @@ export default function LifestyleSection() {
       {/* Product image in front — defines section height, hides text behind it */}
       <div className="ls-image relative z-10">
         <Image
-          src={coverProduct}
+          src="/assets/cover-prodcut.webp"
           alt="RAWE blush sticks lineup"
           width={3840}
           height={983}
