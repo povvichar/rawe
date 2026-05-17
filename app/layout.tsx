@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ToastProvider } from "@/lib/toast";
-
-const sans = Montserrat({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "RAWE — Natural Glow, Made for Your Skin",
@@ -28,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sans.variable}`}>
+    <html lang="en">
       <body className="font-sans antialiased"><ToastProvider>{children}</ToastProvider></body>
     </html>
   );

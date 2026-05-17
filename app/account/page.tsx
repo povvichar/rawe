@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Navbar from "@/components/Navbar";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "@/lib/gsap-init";
 
@@ -337,7 +338,9 @@ button{font:inherit;padding:10px 22px;border:1px solid #1a1a1a;background:#1a1a1
   );
 
   return (
-    <main ref={ref} className="bg-hero min-h-screen flex flex-col items-center justify-center px-5 py-16 overflow-x-hidden">
+    <>
+    <Navbar />
+    <main ref={ref} className="bg-hero min-h-screen flex flex-col items-center justify-center px-5 pt-28 pb-16 overflow-x-hidden">
 
       <p className="brand-watermark absolute inset-0 flex items-center justify-center select-none pointer-events-none opacity-[0] text-[clamp(80px,18vw,260px)] font-display font-light tracking-[0.2em]">
         RAWE
@@ -637,8 +640,8 @@ button{font:inherit;padding:10px 22px;border:1px solid #1a1a1a;background:#1a1a1
                               <div className="flex gap-2 pt-3 border-t border-black/5">
                                 <button
                                   onClick={() => viewInvoice(order)}
-                                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-none text-[10px] tracking-[0.18em] uppercase text-ink transition-colors hover:bg-black/5"
-                                  style={glassCard}
+                                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-none text-[10px] tracking-[0.18em] uppercase text-white transition-opacity hover:opacity-85"
+                                  style={{ background: "#1a1a1a" }}
                                 >
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
@@ -647,8 +650,8 @@ button{font:inherit;padding:10px 22px;border:1px solid #1a1a1a;background:#1a1a1
                                 </button>
                                 <button
                                   onClick={() => downloadInvoice(order)}
-                                  className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-none text-[10px] tracking-[0.18em] uppercase text-ink transition-colors hover:bg-black/5"
-                                  style={glassCard}
+                                  className="flex-1 flex items-center justify-center gap-2 py-3 rounded-none text-[10px] tracking-[0.18em] uppercase text-ink transition-colors hover:bg-black/5"
+                                  style={{ border: "1px solid rgba(0,0,0,0.25)" }}
                                 >
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
@@ -873,5 +876,6 @@ button{font:inherit;padding:10px 22px;border:1px solid #1a1a1a;background:#1a1a1
       )}
 
     </main>
+    </>
   );
 }
